@@ -1,0 +1,37 @@
+### 解题思路
+
+分析：
+
+- 利用栈的思想，很好，为什么不直接用3个变量统计括号数量呢，因为括号的顺序也很重要
+- map用的很好，kv的形式刚好是对应关系，以后要是碰到括号题，要想到
+- 如果对每一个括号操作完成后stack不是空的，就说明括号没有完全匹配
+- 加了两行判断：如果字符串长度为奇数，则false；如果stack大小大于字符串长度的一半，则false；加了两行判断之后速度慢了一些，觉得是因为测试用例的特殊性；加了更全面
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public boolean isValid(String s) {
+		if(s.length()%2!=0) return false;
+		Map<Character, Character> map = new HashMap<Character, Character>();
+		map.put(')', '(');
+		map.put(']', '[');
+		map.put('}', '{');
+		Stack<Character> stack = new Stack<>();
+		
+		for(int i=0;i<s.length();i++) {
+			char temp = s.charAt(i);
+			if(map.containsKey(temp)) {
+				char top = stack.isEmpty()? '#':stack.pop();
+				if(map.get(temp)!=top) return false;
+			}else {
+				stack.push(temp);
+			}
+		}
+		return stack.isEmpty();
+    }
+}
+```
+

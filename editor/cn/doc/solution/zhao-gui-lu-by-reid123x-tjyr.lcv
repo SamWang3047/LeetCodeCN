@@ -1,0 +1,80 @@
+* []
+
+```c++
+class Solution {
+public:
+    int flipLights(int n, int presses) {
+        n = min(3, n);
+        presses = min(3, presses);
+        int res[3][4] = {{1,2,2,2},{1,3,4,4},{1,4,7,8}};
+        return res[n - 1][presses];
+    }
+};
+```
+
+* []
+
+```c
+int flipLights(int n, int presses){
+    if (n > 3) {
+        n = 3;
+    }
+    if (presses > 3) {
+        presses = 3;
+    }
+    int res[3][4] = {{1,2,2,2},{1,3,4,4},{1,4,7,8}};
+    return res[n - 1][presses];
+}
+```
+
+* []
+
+```java
+class Solution {
+    public int flipLights(int n, int presses) {
+        n = Math.min(3, n);
+        presses = Math.min(3, presses);
+        int[][] res = {{1,2,2,2},{1,3,4,4},{1,4,7,8}};
+        return res[n - 1][presses];
+    }
+}
+```
+
+* []
+
+```php
+class Solution {
+
+    /**
+     * @param Integer $n
+     * @param Integer $presses
+     * @return Integer
+     */
+    function flipLights($n, $presses) {
+        $n = min(3, $n);
+        $presses = min(3, $presses);
+        $res = [[1,2,2,2],[1,3,4,4],[1,4,7,8]];
+        return $res[$n - 1][$presses];
+    }
+}
+```
+
+* []
+
+```python
+class Solution:
+    def flipLights(self, n: int, presses: int) -> int:
+        n = min(3, n)
+        presses = min(3, presses)
+        res = [[1,2,2,2],[1,3,4,4],[1,4,7,8]]
+        return res[n - 1][presses]
+```
+
+我们有四种button可以选，只有开和关两种可能，所以可以用0表示关，1表示开。
+bulb是灯泡的意思，0表示开，1表示关。
+然后由于button1的周期为1，button2，3周期为2，button3周期为3，所以讨论周期6。
+发现所有情况只有8种。（正常是16(2\*2\*2\*2)种，有8种是重复的）
+列出所有n，p所对应的答案，发现p大于3之后可以当成3，n大于3之后可以当成3。
+本方法本质上感觉像打表
+![672_1.png](https://pic.leetcode-cn.com/1663213510-sJzziI-672_1.png)
+![672_2.png](https://pic.leetcode-cn.com/1663213514-ZPhzFB-672_2.png)

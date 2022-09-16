@@ -1,0 +1,18 @@
+[详细刷题视频合集](https://xiaochen1024.com/series/6196129fc1553b002e57bef5/6196208ec1553b002e57bef6)      
+[刷题笔记](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18)
+找规律
+
+* JavaScript
+
+```JavaScript
+var canWinNim = function(n) {
+    // 因为说了是聪明人，那么只需要存在一种我赢的可能(此时朋友选1-3都是我赢)，那么就是我赢！
+    // f(1-3):true;f(4):false;f(5):true;f(6):true(!f(6-2));f(7):true(!f(7-3));f(8):false
+    if(n<=3) return true;
+    if(n%4==0) return false;
+    //true:5,6,7; 9,10,11; 13,14,15;-4之后
+    // true:1,2,3; 5,6,7; 9,10,11;观察得到只要不是4的倍数就可以！
+    return true;
+};
+```
+

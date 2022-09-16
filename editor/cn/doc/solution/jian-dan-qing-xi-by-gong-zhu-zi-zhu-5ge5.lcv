@@ -1,0 +1,63 @@
+![image.png](https://pic.leetcode-cn.com/1651677533-JlPbwI-image.png)
+
+我们只要找一个标记数字记录奇偶行就可以了。
+并且层序遍历的时候压入一层 弹出一层 的进行层序遍历，并且在压入的时候记录。
+所得的记录结果就是答案
+
+* 
+
+```
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        //层序遍历队列
+        ArrayList<TreeNode> list = new ArrayList();
+        //结果队列
+        List<List<Integer>> res = new ArrayList();
+        //如果为空直接返回
+        if (root == null) return res;
+        //标志位，如果是奇数则倒叙返回，如果是偶数则正向返回
+        int sign = 1;
+        //加入根节点开始层序遍历
+        list.add(root);
+        //记录根节点答案
+        List<Integer> ans = new ArrayList<Integer>();
+        ans.add(root.val);
+        res.add(ans);
+        //当队列不为空
+        while (list.size() > 0) {
+            //直接输出整一层，并且压入下一层全部
+            int length = list.size();
+            for (int i = 0; i < length; i++) {
+                TreeNode temp = list.remove(0);
+                if (temp != null) {
+                    list.add(temp.left);
+                    list.add(temp.right);
+                }
+            }
+            //记录当前队列中的结果（注意上一层的已经记录了，因为我们开始就记录了根，但是并没有弹出根，所以记录是比弹出快一步的）
+            //偶数正向记录
+            if (sign % 2 == 0) {
+                ans = new ArrayList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    //不记录null
+                    if (list.get(i) != null) ans.add(list.get(i).val);
+                }
+            }
+            //奇数反向记录 
+            else {
+                ans = new ArrayList<>();
+                for (int i = list.size() - 1; i >= 0; i--) {
+                    if (list.get(i) != null) ans.add(list.get(i).val);
+                }
+            }
+            //放入结果队列
+            if (ans.size() > 0) res.add(ans);
+            //改变标志位
+            sign++;
+        }
+        层序遍历结束，也记录结束
+        return res;
+    }
+}
+```
+

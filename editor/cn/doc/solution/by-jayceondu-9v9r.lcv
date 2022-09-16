@@ -1,0 +1,58 @@
+![image.png](https://pic.leetcode-cn.com/1662524157-YbyFNB-image.png)
+
+1. 计算空格数和单词数
+2. 计算出中间空格数和尾部空格数
+3. 往StringBuilder加单词和空格
+
+* 
+
+```
+    public String reorderSpaces(String text) {
+        StringBuilder builder = new StringBuilder(text.length());
+        char[] chars = text.toCharArray();
+        int spaceCount = 0;
+        int wordCount = 0;
+
+        //遍历一遍，计算空格数和单词数
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == ' ') {
+                spaceCount++;
+            } else {
+                wordCount++;
+                for (int j = i + 1; j < chars.length && chars[j] != ' '; j++, i++) ;
+            }
+        }
+        //计算出中间空格数和尾部空格数
+        int midSpaceCount, tailSpaceCount;
+        if (wordCount == 1) {
+            midSpaceCount = 0;
+            tailSpaceCount = spaceCount;
+        } else {
+            midSpaceCount = spaceCount / (wordCount - 1);
+            tailSpaceCount = spaceCount % (wordCount - 1);
+        }
+        //往StringBuilder加单词和空格
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] != ' ') {
+                //第二个单词开始前面加空格
+                if (builder.length()!=0) {
+                    for (int k = 0; k < midSpaceCount; k++) {
+                        builder.append(' ');
+                    }
+                }
+                //加单词
+                for (; i < chars.length && chars[i] != ' '; i++) {
+                    builder.append(chars[i]);
+                }
+            }
+        }
+        //尾部空格加上
+        for (int i = 0; i < tailSpaceCount; i++) {
+            builder.append(' ');
+        }
+
+        return builder.toString();
+    }
+
+```
+

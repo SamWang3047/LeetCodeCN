@@ -1,0 +1,111 @@
+# 前言
+
+这道题和标准二分查找大致相同，区别在于当数组中没有目标值时，不是返回 $-1$，而是返回目标值在数组中的插入位置，使得插入目标值之后的数组仍然按升序排序。
+
+由于这道题和最简单的二分查找的区别只有没有找到目标值时的返回值，因此可以使用二分查找的做法，当没有找到目标值时将返回 $-1$ 换成返回插入位置即可。
+
+假设目标值 $\textit{target}$ 在数组 $\textit{nums}$ 中的插入位置是 $\textit{index}$，则为了确保插入目标值之后的数组 $\textit{nums}$ 仍然按升序排序，应满足 $\textit{nums}[\textit{index} - 1] < \textit{target} < \textit{nums}[\textit{index}]$。这里假设 $\textit{nums}[-1] = -\infty$，$\textit{nums}[n] = +\infty$，其中 $n$ 是数组 $\textit{nums}$ 的长度。
+
+用 $\textit{low}$ 和 $\textit{high}$ 分别表示二分查找的下标范围的下界和上界，每次查找时，取 $\textit{mid}$ 为 $\textit{low}$ 和 $\textit{high}$ 的平均数向下取整，判断下标 $\textit{mid}$ 处的数和目标值的大小关系，调整查找的下标范围。
+
+在二分查找的过程中，如果 $\textit{nums}[\textit{mid}] < \textit{target}$，则将 $\textit{low}$ 更新为 $\textit{mid} + 1$，因此在二分查找结束之后有 $\textit{nums}[\textit{low}] \ge \textit{target}$。当目标值不存在时，二分查找结束之后有 $\textit{nums}[\textit{low}] > \textit{target}$。又由于当 $\textit{nums}[\textit{mid}] \ge \textit{target}$ 时不可能将 $\textit{low}$ 更新为比 $\textit{mid}$ 大的值，因此在二分查找结束之后有 $\textit{nums}[\textit{low} - 1] < \textit{target}$。
+
+因此在二分查找结束之后有 $\textit{nums}[\textit{low} - 1] < \textit{target} < \textit{nums}[\textit{low}]$，$\textit{low}$ 即为目标值在数组中的插入位置。
+
+根据上述分析，可以得到搜索插入位置的完整过程。
+
+用 $\textit{low}$ 和 $\textit{high}$ 分别表示二分查找的下标范围的下界和上界，初始时 $\textit{low}$ 和 $\textit{high}$ 分别为数组的最小下标和最大下标。每次查找时，取 $\textit{mid}$ 为 $\textit{low}$ 和 $\textit{high}$ 的平均数向下取整，判断下标 $\textit{mid}$ 处的数和目标值的大小关系，调整查找的下标范围。
+
+- 如果 $\textit{nums}[\textit{mid}] = \textit{target}$，则找到目标值，其下标为 $\textit{mid}$。
+
+- 如果 $\textit{nums}[\textit{mid}] > \textit{target}$，则如果目标值存在，其下标一定小于 $\textit{mid}$，因此在下标范围 $[\textit{low}, \textit{mid} - 1]$ 中继续查找。
+
+- 如果 $\textit{nums}[\textit{mid}] < \textit{target}$，则如果目标值存在，其下标一定大于 $\textit{mid}$，因此在下标范围 $[\textit{mid} + 1, \textit{high}]$ 中继续查找。
+
+如果查找的过程中出现 $\textit{low} > \textit{high}$，则目标值不存在，插入位置是 $\textit{low}$，返回 $\textit{low}$。
+
+每次查找都可以将查找的下标范围减少一半，因此当数组的长度是 $n$ 时，二分查找搜索插入位置的时间复杂度是 $O(\log n)$。
+
+二分查找搜索插入位置可以使用递归或迭代实现。
+
+# 解法一
+
+## 思路和算法
+
+使用递归实现二分查找时，需要在递归调用时指定查找的下标范围。每次查找时，如果当前查找的下标处的元素值等于目标值则返回当前查找的下标，否则根据元素值与目标值的大小关系调整查找的下标范围，然后在新的下标范围中继续查找。
+
+递归调用有以下两个终止条件。
+
+1. 如果当前的下标范围是空，即 $\textit{low} > \textit{high}$，则目标值不存在，插入位置是 $\textit{low}$，返回 $\textit{low}$。
+
+2. 如果当前查找的下标处的元素值等于目标值，则返回当前查找的下标。
+
+## 代码
+
+* [sol1-Java]
+
+```Java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        return searchInsert(nums, target, 0, nums.length - 1);
+    }
+
+    public int searchInsert(int[] nums, int target, int low, int high) {
+        if (low > high) {
+            return low;
+        }
+        int mid = low + (high - low) / 2;
+        if (nums[mid] == target) {
+            return mid;
+        } else if (nums[mid] > target) {
+            return searchInsert(nums, target, low, mid - 1);
+        } else {
+            return searchInsert(nums, target, mid + 1, high);
+        }
+    }
+}
+```
+
+## 复杂度分析
+
+- 时间复杂度：$O(\log n)$，其中 $n$ 是数组 $\textit{nums}$ 的长度。二分查找的次数是 $O(\log n)$，每次查找的时间是 $O(1)$，时间复杂度是 $O(\log n)$。
+
+- 空间复杂度：$O(\log n)$，其中 $n$ 是数组 $\textit{nums}$ 的长度。空间复杂度主要取决于递归调用栈空间，递归调用栈的层数是 $O(\log n)$。
+
+# 解法二
+
+## 思路和算法
+
+使用迭代实现二分查找时，需要在二分查找的过程中维护查找的下标范围。每次查找时，如果当前查找的下标处的元素值等于目标值则返回当前查找的下标，否则根据元素值与目标值的大小关系调整查找的下标范围，然后在新的下标范围中继续查找。
+
+查找的过程中，如果当前查找的下标处的元素值等于目标值，则返回当前查找的下标。如果出现 $\textit{low} > \textit{high}$，则目标值不存在，插入位置是 $\textit{low}$，返回 $\textit{low}$。
+
+## 代码
+
+* [sol2-Java]
+
+```Java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int low = 0, high = nums.length - 1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+}
+```
+
+## 复杂度分析
+
+- 时间复杂度：$O(\log n)$，其中 $n$ 是数组 $\textit{nums}$ 的长度。二分查找的次数是 $O(\log n)$，每次查找的时间是 $O(1)$，时间复杂度是 $O(\log n)$。
+
+- 空间复杂度：$O(1)$。
+

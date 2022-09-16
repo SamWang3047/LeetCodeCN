@@ -1,0 +1,282 @@
+### 解题思路
+
+# JavaScript手撕链表
+
+1. 创建结点
+   任何与添加结点相关的操作，都需要new一个结点出来，可以想成数组元素
+
+* []
+
+```javascript
+class LinkNode {
+    constructor(val, next) {
+    //constructor构造函数传入新建结点的值和下一个结点的指针
+        this.val = val;
+        this.next = next;
+    /*this指针的作用：
+        1.当形参与成员变量同名时，可以用this指针来区分
+        2.this指针指向被调用的成员函数所属的对象，所以在类的非静态
+        成员函数中用return *this可以返回对象本身，谁调用就指向谁
+    */
+    }
+}
+```
+
+2. 初始化单链表
+   单链表由一个个LinkNode的结点组成，可以想成数组
+   单链表包含 长度、头结点、尾结点
+
+* []
+
+```javascript
+var MyLinkedList = function() {
+    this._size = 0;
+    this._tail = null;
+    this._head = null;
+};
+```
+
+3. 通过遍历到达下标为index的结点处
+   因为链表不同于数组，不能直接通过索引获取，只能从头一个一个的遍历
+   ![1.jpg](https://pic.leetcode-cn.com/1661258598-ldreJJ-1.jpg)
+
+* []
+
+```javascript
+MyLinkedList.prototype.getNode = function(index) {
+    //超出链表范围 
+    if(index < 0 || index >= this._size) return null;
+    let cur = new LinkNode(0, this._head);//创建虚拟头节点dummy_head
+    //在head前创建了一个虚拟头结点 值为0，指向head。即：0 -> head
+    while(index-- >= 0) {
+        /*index-- >= 0 中=的原因：
+            cur当前是指向head的虚拟head，由于虚拟头结点的加入，
+            所以相当于index得多减一次才能达到要求的索引位置*/
+        cur = cur.next;
+    }
+    return cur;
+};
+```
+
+4. 获取index结点的值
+   由于在3中我们已经通过遍历到达了index的结点，直接.val获取值就行了
+
+* []
+
+```javascript
+MyLinkedList.prototype.get = function(index) {
+    if(index < 0 || index >= this._size) return -1;
+    // 获取当前节点
+    return this.getNode(index).val;
+};
+```
+
+5. 在第一个元素前添加一个结点
+   因为有虚拟头结点dummy_head
+   所以相当于在dummy_head和head之间插入一个结点
+   ![2.jpg](https://pic.leetcode-cn.com/1661258354-TjDjbJ-2.jpg)
+
+* []
+
+```javascript
+MyLinkedList.prototype.addAtHead = function(val) {
+    const node = new LinkNode(val, this._head);
+    this._head = node;
+    this._size++;
+    //MyLinkedList一开始头尾结点都是null
+    //在链表为空的情况下，头结点也是尾结点
+    if(!this._tail) {
+        this._tail = node;
+    }
+};
+```
+
+6. 尾部插入结点
+   在尾部插入也首先是新定义一个结点
+
+* []
+
+```javascript
+MyLinkedList.prototype.addAtTail = function(val) {
+    const node = new LinkNode(val, null);
+    this._size++;
+    //通过遍历达到尾部的结点
+    if(this._tail) {
+        this._tail.next = node;
+        this._tail = node;
+        return;
+    }
+    //同5的情况，在链表为空的情况下，头结点也是尾结点
+    this._tail = node;
+    this._head = node;
+};
+```
+
+7. 在index处添加
+
+* []
+
+```javascript
+MyLinkedList.prototype.addAtIndex = function(index, val) {
+    if(index > this._size) return;
+    if(index <= 0) {
+        this.addAtHead(val);
+        return;
+    }
+    if(index === this._size) {
+        this.addAtTail(val);
+        return;
+    }
+    // 获取目标节点的上一个的节点
+    const node = this.getNode(index - 1);
+    node.next = new LinkNode(val, node.next);
+    this._size++;
+};
+```
+
+8. 在index处删除
+
+* []
+
+```javascript
+MyLinkedList.prototype.deleteAtIndex = function(index) {
+    if(index < 0 || index >= this._size) return;
+    if(index === 0) {
+        this._head = this._head.next;
+        // 如果删除的这个节点同时是尾节点，要处理尾节点
+        if(index === this._size - 1){
+            this._tail = this._head
+        }
+        this._size--;
+        return;
+    }
+    // 获取目标节点的上一个的节点
+    const node = this.getNode(index - 1);    
+    node.next = node.next.next;
+    // 处理尾节点
+    if(index === this._size - 1) {
+        this._tail = node;
+    }
+    this._size--;
+};
+```
+
+下附完整js代码：
+
+### 代码
+
+* javascript
+
+```javascript
+class LinkNode {
+    constructor(val, next) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+/**
+ * Initialize your data structure here.
+ * 单链表 储存头尾节点 和 节点数量
+ */
+var MyLinkedList = function() {
+    this._size = 0;
+    this._tail = null;
+    this._head = null;
+};
+
+MyLinkedList.prototype.getNode = function(index) {
+    if(index < 0 || index >= this._size) return null;//超出链表范围 
+    let cur = new LinkNode(0, this._head);// 创建虚拟头节点
+    // 0 -> head
+    while(index-- >= 0) {
+        cur = cur.next;
+    }
+    return cur;
+};
+MyLinkedList.prototype.get = function(index) {
+    if(index < 0 || index >= this._size) return -1;
+    // 获取当前节点
+    return this.getNode(index).val;
+};
+
+/**
+ * Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. 
+ * @param {number} val
+ * @return {void}
+ */
+MyLinkedList.prototype.addAtHead = function(val) {
+    const node = new LinkNode(val, this._head);
+    this._head = node;
+    this._size++;
+    if(!this._tail) {
+        this._tail = node;
+    }
+};
+
+/**
+ * Append a node of value val to the last element of the linked list. 
+ * @param {number} val
+ * @return {void}
+ */
+MyLinkedList.prototype.addAtTail = function(val) {
+    const node = new LinkNode(val, null);
+    this._size++;
+    if(this._tail) {
+        this._tail.next = node;
+        this._tail = node;
+        return;
+    }
+    this._tail = node;
+    this._head = node;
+};
+
+/**
+ * Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. 
+ * @param {number} index 
+ * @param {number} val
+ * @return {void}
+ */
+MyLinkedList.prototype.addAtIndex = function(index, val) {
+    if(index > this._size) return;
+    if(index <= 0) {
+        this.addAtHead(val);
+        return;
+    }
+    if(index === this._size) {
+        this.addAtTail(val);
+        return;
+    }
+    // 获取目标节点的上一个的节点
+    const node = this.getNode(index - 1);
+    node.next = new LinkNode(val, node.next);
+    this._size++;
+};
+
+/**
+ * Delete the index-th node in the linked list, if the index is valid. 
+ * @param {number} index
+ * @return {void}
+ */
+MyLinkedList.prototype.deleteAtIndex = function(index) {
+    if(index < 0 || index >= this._size) return;
+    if(index === 0) {
+        this._head = this._head.next;
+        // 如果删除的这个节点同时是尾节点，要处理尾节点
+        if(index === this._size - 1){
+            this._tail = this._head
+        }
+        this._size--;
+        return;
+    }
+    // 获取目标节点的上一个的节点
+    const node = this.getNode(index - 1);    
+    node.next = node.next.next;
+    // 处理尾节点
+    if(index === this._size - 1) {
+        this._tail = node;
+    }
+    this._size--;
+};
+```
+

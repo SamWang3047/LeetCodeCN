@@ -1,0 +1,20 @@
+每个按键代表一个基向量，四个基向量分别为x1[1,1,1,1...] x2[1,0,1,0...] x3[0,1,0,1...] x4[1,0,0,1,0,0...]
+当n>=3时，向量x1，x2，x4组成最大无关组
+按键所控制的是基向量的系数a，只能为0，1
+结果y = a1x1 + a2x2 + a3x3 + a4x4;
+
+解空间元素个数为2^3=8，最多有8种结果
+
+* 
+
+```
+class Solution {
+    public int flipLights(int n, int presses) {
+        if(presses==0)return 1;
+        if(n==1)return 2;
+        if(n==2)return (presses==1)?3:4;
+        return (presses>2)?8:(presses==1)?4:7;
+    }
+}
+```
+

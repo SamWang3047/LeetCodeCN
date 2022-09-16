@@ -1,0 +1,54 @@
+### 解题思路
+
+此处撰写解题思路
+
+### 代码
+
+* typescript
+
+```typescript
+function isPalindrome(x: number): boolean {
+    if (x >= 0) {
+        if (x < 10) {
+            return true;
+        }
+        else {
+            let arr = [];
+            var i = 1;
+            while ( x > Math.pow(10,i) && x % Math.pow(10,i)!== 0) {
+                if (arr.length > 0) {
+                    let total = arr.reduce((acc,cur,idx,index) => {
+                        return acc + cur*(Math.pow(10,idx));
+                    },0)
+                    let num = (x % Math.pow(10,i) - total) / Math.pow(10,i-1);
+                    arr.push(num);
+                    if (x < Math.pow(10,i+1)) {
+                        let num = Math.floor(x/Math.pow(10,i));
+                        arr.push(num);
+                    }
+                }
+                else {
+                    arr.push(x % Math.pow(10,i));
+                    if (x < Math.pow(10,i+1)) {
+                        let num = Math.floor(x/Math.pow(10,i));
+                        arr.push(num);
+                    }
+                }
+                i++;
+            }
+            console.log(arr);
+            let str = arr.join('');
+            if (str === String(x)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    else {
+        return false;
+    }
+};
+```
+

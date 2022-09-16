@@ -1,0 +1,46 @@
+* 
+
+```
+class Solution {
+public:
+    int trap(vector<int>& height) {
+       
+        int n = height.size();
+        if(n == 0 || n == 1 || n == 2)  return 0;
+
+        vector<int> left(n), right(n);
+
+        int i = 0;
+        while(height[i] == 0)   
+        {
+            left[i] = right[i] = 0;            
+            i++;
+        }
+
+        int maxl = 0;
+        for( ; i < n; i++)
+        {
+            left[i] = maxl;
+            maxl = max(maxl, height[i]);
+        }
+
+        int maxr = 0;
+        for(i = n - 1; i >= 0; i--)
+        {
+            right[i] = maxr;
+            maxr = max(maxr, height[i]);
+        }
+        int ans = 0;
+        int minn;
+        for(i = 0; i < n; i++)
+        {
+            minn = min(left[i], right[i]);
+
+            if(minn > height[i])
+                ans += minn - height[i];
+        }
+        return ans;
+    }
+};
+```
+

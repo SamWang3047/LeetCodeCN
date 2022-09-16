@@ -1,0 +1,76 @@
+以下解法复杂度：
+- 时间复杂度：O(n)
+- 空间复杂度：O(1)
+
+方法一：原地哈希
+
+* java
+
+```java
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            int t = nums[i];
+            if (t - 1 == i || nums[t - 1] == t) continue;
+            else {
+                int c = nums[t - 1];
+                nums[t - 1] = nums[i];
+                nums[i--] = c;
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1) res.add(i + 1);
+        }
+        return res;
+    }
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1657510753-wuHKLl-image.png)
+
+方法二：取负
+
+* java
+
+```java
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            int idx = Math.abs(nums[i]) - 1;
+            if (nums[idx] > 0) nums[idx] *= -1;
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) res.add(i + 1);
+        }
+        return res;
+    }
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1657511472-nZPzCD-image.png)
+
+方法三：偏移
+
+* java
+
+```java
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        int OFFSET = (int) 1e5;
+        for (int i = 0; i < nums.length; i++) {
+            int idx = (nums[i] - 1) % OFFSET;
+            if (nums[idx] < OFFSET) nums[idx] += OFFSET;
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < OFFSET) res.add(i + 1);
+        }
+        return res;
+    }
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1657511596-rEdoEe-image.png)
+

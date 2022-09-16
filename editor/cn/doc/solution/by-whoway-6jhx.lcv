@@ -1,0 +1,55 @@
+## 核心思考
+
+- //特殊的设计，我设计从哪个分支来，这样就能知道哪个是左叶子了
+- //左边分支来的，为1
+- //右边分支来的，为-1
+
+* cpp
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+int res;
+//特殊的设计，我设计从哪个分支来，这样就能知道哪个是左叶子了
+//左边分支来的，为1
+//右边分支来的，为-1
+void DFS( TreeNode * root , int left_right_go_here)
+{
+    if( nullptr==root )
+    {
+        return ;
+    }
+
+    if( nullptr==root->left && nullptr==root->right && 1==left_right_go_here )
+    {
+        res+=root->val;
+        return;
+    }
+    if( nullptr==root->left && nullptr==root->right)
+    {
+        return ;
+    }
+
+    DFS( root->left, 1);
+    DFS( root->right, -1);
+}
+
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        res=0;
+        DFS( root , 0);
+        return res;
+    }
+};
+```
+

@@ -1,0 +1,24 @@
+[详细刷题视频合集](https://xiaochen1024.com/series/6196129fc1553b002e57bef5/6196208ec1553b002e57bef6)      
+[刷题笔记](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18)
+先序遍历树中的全部节点，交换左右节点即可。
+
+* 
+
+```
+var mirrorTree = function(root) {
+    preOrderTraverse(root);
+    return root;
+};
+
+var preOrderTraverse = function(node) {
+    if(node != null) {
+        let temp = node.left;
+        node.left = node.right;
+        node.right = temp;
+        preOrderTraverse(node.left);
+        preOrderTraverse(node.right);
+    }
+}
+
+```
+
