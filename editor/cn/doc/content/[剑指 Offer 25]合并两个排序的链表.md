@@ -1,39 +1,19 @@
-<p>将两个升序链表合并为一个新的 <strong>升序</strong> 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。&nbsp;</p>
+<p>输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。</p>
 
-<p>&nbsp;</p>
+<p><strong>示例1：</strong></p>
 
-<p><strong>示例 1：</strong></p> 
-<img alt="" src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg" style="width: 662px; height: 302px;" /> 
-<pre>
-<strong>输入：</strong>l1 = [1,2,4], l2 = [1,3,4]
-<strong>输出：</strong>[1,1,2,3,4,4]
-</pre>
+<pre><strong>输入：</strong>1-&gt;2-&gt;4, 1-&gt;3-&gt;4
+<strong>输出：</strong>1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4</pre>
 
-<p><strong>示例 2：</strong></p>
+<p><strong>限制：</strong></p>
 
-<pre>
-<strong>输入：</strong>l1 = [], l2 = []
-<strong>输出：</strong>[]
-</pre>
+<p><code>0 &lt;= 链表长度 &lt;= 1000</code></p>
 
-<p><strong>示例 3：</strong></p>
+<p>注意：本题与主站 21 题相同：<a href="https://leetcode-cn.com/problems/merge-two-sorted-lists/">https://leetcode-cn.com/problems/merge-two-sorted-lists/</a></p>
 
-<pre>
-<strong>输入：</strong>l1 = [], l2 = [0]
-<strong>输出：</strong>[0]
-</pre>
+<details><summary><strong>Related Topics</strong></summary>递归 | 链表</details><br>
 
-<p>&nbsp;</p>
-
-<p><strong>提示：</strong></p>
-
-<ul> 
- <li>两个链表的节点数目范围是 <code>[0, 50]</code></li> 
- <li><code>-100 &lt;= Node.val &lt;= 100</code></li> 
- <li><code>l1</code> 和 <code>l2</code> 均按 <strong>非递减顺序</strong> 排列</li> 
-</ul>
-
-<div><div>Related Topics</div><div><li>递归</li><li>链表</li></div></div><br><div><li>👍 2635</li><li>👎 0</li></div>
+<div>👍 278, 👎 0</div>
 
 <div id="labuladong"><hr>
 
@@ -41,10 +21,12 @@
 
 
 
-<p><strong><a href="https://labuladong.github.io/article?qno=21" target="_blank">⭐️labuladong 题解</a></strong></p>
+<p><strong><a href="https://labuladong.github.io/article?qno=剑指Offer25" target="_blank">⭐️labuladong 题解</a></strong></p>
 <details><summary><strong>labuladong 思路</strong></summary>
 
 ## 基本思路
+
+这道题和 [21. 合并两个有序链表](/problems/merge-two-sorted-lists) 相同。
 
 > 本文有视频版：[链表双指针技巧全面汇总](https://www.bilibili.com/video/BV1q94y1X7vy)
 
@@ -123,4 +105,6 @@ class Solution {
 
 </details>
 </div>
+
+
 

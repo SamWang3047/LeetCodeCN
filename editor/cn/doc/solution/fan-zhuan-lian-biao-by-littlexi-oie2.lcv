@@ -1,0 +1,31 @@
+### 解题思路
+
+prev不能直接指向head，不然1和2就会形成环
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head || !head->next)
+            return head;
+        ListNode* p = NULL;
+        ListNode* q = head;
+        ListNode* r = NULL;
+        while (q)
+        {
+            r = q->next;
+            q->next = p;
+            p = q;
+            q = r;
+        }
+        head = p;
+        return head;
+    }
+};
+
+```
+

@@ -1,0 +1,22 @@
+![image.png](https://pic.leetcode-cn.com/1629863760-eOogJh-image.png)
+**注意考虑特殊情况**
+1. k==0时
+2. shorter == longer时
+
+* 
+
+```
+代码块
+class Solution {
+    public int[] divingBoard(int shorter, int longer, int k) {
+        if (k == 0) return new int[0];
+        if (longer == shorter) return new int[]{shorter * k};
+        int[] arr = new int[k + 1];
+        for (int i = 0; i <= k; i++) {
+            arr[i] = i * longer + (k - i) * shorter;
+        }
+        return arr;
+    }
+}
+```
+

@@ -1,0 +1,53 @@
+双指针：
+
+* java
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head==null)
+            return null;
+        // 起始leftP从null开始，代表新链表的尾节点后。
+        ListNode leftP = null;
+        ListNode rightP = head;
+        while (rightP!=null) {
+            // 保存右节点的下一个节点。
+            ListNode tmpP = rightP.next;
+            // 反转当前两个节点的关系。
+            rightP.next = leftP;
+            // 步进到下两个节点。
+            leftP = rightP;
+            rightP = tmpP;
+        }
+        // 最终leftP指向原链表的尾节点，新链表的头节点。
+        return leftP;
+    }
+}
+```
+
+递归：
+
+* java
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head==null)
+            return null;
+        return reverse(head, null);
+    }
+    ListNode reverse(ListNode node, ListNode preNode) {
+        ListNode retNode;
+        // 还有后续节点，继续递归，并且返回后续节点作为新的头节点。
+        if (node.next!=null)
+            retNode = reverse(node.next, node);
+            // 否则当前节点就是之前的尾巴节点，返回当前节点。
+        else
+            retNode = node;
+        // 逆序，将前节点反过来接在后节点位置。
+        node.next = preNode;
+        return retNode;
+    }
+}
+```
+

@@ -1,0 +1,26 @@
+[详细刷题视频合集](https://xiaochen1024.com/series/6196129fc1553b002e57bef5/6196208ec1553b002e57bef6)      
+[刷题笔记](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18)
+借助栈实现。
+
+* 
+
+```
+var reverseList = function(head) {
+    if(head == null) return null;
+    let stack = [];
+    let point = head;
+    while(point != null){
+        stack.push(point);
+        point = point.next;
+    }
+    head = point = stack.pop();
+    while(stack.length > 0){
+        point.next = stack.pop();
+        point = point.next;
+    }
+    point.next = null;
+    return head;
+};
+
+```
+

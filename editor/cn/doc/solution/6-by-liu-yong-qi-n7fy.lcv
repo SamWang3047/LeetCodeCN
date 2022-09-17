@@ -1,0 +1,32 @@
+### 解题思路
+
+![屏幕快照 2022-05-21 上午11.23.45.png](https://pic.leetcode-cn.com/1653103433-JOVmuG-%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202022-05-21%20%E4%B8%8A%E5%8D%8811.23.45.png)
+
+一共有 k+1 个元素
+ans[0] 全选 shorter
+ans[1] 选一个 longer 剩余全选 shorter
+ans[2] 选两个 longer 剩余全选 shorter
+以此类推
+
+k == 0 时没有元素， 所以 if 一下就可以了
+
+最后稍微化简一下，就是👇这样
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    vector<int> divingBoard(int shorter, int longer, int k) {
+        if(k == 0) return vector<int>();
+        vector<int> ans(1,k*shorter);
+        int c = longer-shorter;
+        if(shorter==longer) return ans;
+        while(k--) ans.push_back(ans.back()+c);
+        return ans;
+    }
+};
+```
+
