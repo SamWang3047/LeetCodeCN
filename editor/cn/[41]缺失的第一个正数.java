@@ -36,10 +36,22 @@
 // Related Topics 数组 哈希表 👍 1587 👎 0
 
 
+import java.util.HashMap;
+
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int firstMissingPositive(int[] nums) {
-
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i], i);
+        }
+        //正数序列从1————nums.length
+        for (int i = 1; i < nums.length + 1; i++) {
+            if(!map.containsKey(i)){
+                return i;
+            }
+        }
+        return nums.length + 1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

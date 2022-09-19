@@ -1,0 +1,73 @@
+#### 方法一：直接判断
+
+计算两个子结点值之和，判断是否等于根结点值即可。
+
+* [sol1-Java]
+
+```Java
+class Solution {
+    public boolean checkTree(TreeNode root) {
+        return root.val == root.left.val + root.right.val;
+    }
+}
+```
+
+* [sol1-C#]
+
+```C#
+public class Solution {
+    public bool CheckTree(TreeNode root) {
+        return root.val == root.left.val + root.right.val;
+    }
+}
+```
+
+* [sol1-C++]
+
+```C++
+class Solution {
+public:
+    bool checkTree(TreeNode* root) {
+        return root->val == root->left->val + root->right->val;
+    }
+};
+```
+
+* [sol1-Python3]
+
+```Python
+class Solution:
+    def checkTree(self, root: Optional[TreeNode]) -> bool:
+        return root.val == root.left.val + root.right.val
+```
+
+* [sol1-C]
+
+```C
+bool checkTree(struct TreeNode* root) {
+    return root->val == root->left->val + root->right->val;
+}
+```
+
+* [sol1-Golang]
+
+```Go
+func checkTree(root *TreeNode) bool {
+    return root.Val == root.Left.Val + root.Right.Val
+}
+```
+
+* [sol1-JavaScript]
+
+```JavaScript
+var checkTree = function(root) {
+    return root.val === root.left.val + root.right.val;
+};
+```
+
+**复杂度分析**
+
+- 时间复杂度：$O(1)$。
+
+- 空间复杂度：$O(1)$。
+

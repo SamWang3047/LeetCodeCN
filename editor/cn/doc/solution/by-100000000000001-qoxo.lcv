@@ -1,0 +1,33 @@
+---
+
+### 求解思路
+
+暴力破解
+
+### 代码
+
+* python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def checkTree(self, root: Optional[TreeNode]) -> bool:
+        return root.val == root.left.val + root.right.val
+```
+
+### 复杂度分析
+
+![image.png](https://pic.leetcode-cn.com/1662733323-nxsozt-image.png)
+
+---
+
+---
+
+### 刷题经验分享
+
+[刷题经验贴](https://leetcode-cn.com/circle/discuss/PZO1if/) ——  **系统化快速学习刷题与总结**
