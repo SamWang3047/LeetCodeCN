@@ -1,0 +1,33 @@
+* java
+
+```java
+class Solution {
+    public int countPoints(String rings) {
+        int[] poleList = new int[10];
+        for (int i = 0; i < rings.length(); i += 2) {
+            int idx = rings.charAt(i + 1) - '0';
+            char color = rings.charAt(i);
+            switch (color) {
+                case 'R':
+                    poleList[idx] |= 1;
+                    break;
+                case 'G':
+                    poleList[idx] |= 2;
+                    break;
+                case 'B':
+                    poleList[idx] |= 4;
+                    break;
+            }
+        }
+
+        int ans = 0;
+        for (int pole : poleList) {
+            if (pole == 7) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}
+```
+

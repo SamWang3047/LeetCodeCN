@@ -1,0 +1,25 @@
+![image.png](https://pic.leetcode-cn.com/1639283382-hCnDVM-image.png)
+简单题，想啥思路，就是代码一把梭，重拳出击
+
+* java
+
+```java
+class Solution {
+    public int countPoints(String rings) {
+        char[] chars = rings.toCharArray();
+        int[] num = new int[10];
+        for (int i = 0; i < chars.length; i += 2) {
+            num[chars[i + 1] - '0'] |= chars[i] == 'R' ? 1 : chars[i] == 'G' ? 2 : 4;
+        }
+
+        int count = 0;
+        for (int i : num) {
+            if (i == 7) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+```
+
