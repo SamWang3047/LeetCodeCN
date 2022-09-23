@@ -1,0 +1,77 @@
+#### 方法一：使用 `WHERE` 子句和 `OR`【通过】
+
+**思路**
+
+使用 `WHERE` 子句过滤所有记录，获得满足条件的国家。
+
+**算法**
+
+根据定义，大国家至少满足以下两个条件中的一个：
+
+1. 面积超过 300 万平方公里。
+
+2. 人口超过 2500 万。
+
+使用下面语句获得满足条件 1 的大国家。
+
+* mysql
+
+```mysql
+SELECT name, population, area FROM world WHERE area > 3000000
+```
+
+使用下面语句获得满足条件 2 的大国家。
+
+* mysql
+
+```mysql
+SELECT name, population, area FROM world WHERE population > 25000000
+```
+
+使用 `OR` 将两个子查询合并在一起。
+
+**MySQL**
+
+* mysql
+
+```mysql
+SELECT
+    name, population, area
+FROM
+    world
+WHERE
+    area >= 3000000 OR population >= 25000000
+;
+```
+
+#### 方法二：使用 `WHERE` 子句和 `UNION`【通过】
+
+**算法**
+
+该方法思路与 *方法一* 一样，但是使用 `UNION` 连接子查询。
+
+**MySQL**
+
+* mysql
+
+```mysql
+SELECT
+    name, population, area
+FROM
+    world
+WHERE
+    area >= 3000000
+
+UNION
+
+SELECT
+    name, population, area
+FROM
+    world
+WHERE
+    population >= 25000000
+;
+```
+
+> 注：*方法二* 比 *方法一* 运行速度更快，但是它们没有太大差别。
+

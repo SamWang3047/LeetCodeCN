@@ -61,13 +61,15 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int removeElement(int[] nums, int val) {
-        int ans = 0;
-        for(int num: nums) {
-            if(num != val) {
-                nums[ans] = num; ans++;
+        int fast = 0, slow = 0;
+        while (fast < nums.length){
+            if (nums[fast] != val){
+                nums[slow] = nums[fast];
+                slow++;
             }
+            fast++;
         }
-        return ans;
+        return slow;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
