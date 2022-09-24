@@ -1,0 +1,43 @@
+### 解题思路
+
+这个题是简单题，直接暴力的话对思维并没有进步，所以可以尝试一下优化成滑动窗口，如果面试的时候直接暴力的话可能会扣印象分？
+思路很简单，如果k = 0全部换成0.
+然后一直滑动窗口，计算出该窗口和对应的返回的值下标。一直滑动即可。
+![image.png](https://pic.leetcode-cn.com/1663991040-mEAGCi-image.png)
+如图中例子，先求出区间和，填入相应的下标中。
+由于是循环的数组，所以指针越界了需要对其进行转换操作，例如
+![image.png](https://pic.leetcode-cn.com/1663991318-wLBGjI-image.png)
+上图是下标轮转操作，对于右边出界的情况，可以对其进行i % len，就会重新指向0
+下面部分是左边界出界的情况，可以用(i + len) % len操作，
+可以统一为(i + len) % len，就可以使得无论是左边界和右边界出界，都能保证映射到下一轮循环中。
+同理，k<0的情况下，也可以将该区间映射到相应的下标，分类讨论即可。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int[] decrypt(int[] code, int k) {
+        int len = code.length;
+        int[] res = new int[len];
+        if(k == 0) return res;
+        int sum = 0;
+        for(int i = 0; i < Math.abs(k); i++) 
+            sum += code[i]; 
+        
+        for(int i = 0; i < len; i++) {
+            if(k > 0) {
+                res[(i - 1 + len) % len] = sum;
+            } else {
+                res[(i - k + len) % len] = sum;
+            }
+            sum -= code[i];
+            sum += code[(i + Math.abs(k)) % len];
+        }
+        return res;
+
+    }
+}
+```
+

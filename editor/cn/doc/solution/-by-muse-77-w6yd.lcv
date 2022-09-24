@@ -1,0 +1,40 @@
+# 解题思路
+
+为了避免重复计算数组中的元素，所以，我们可以采用**滑动窗口**的方式，进行统计操作。
+
+首先，根据入参k值，即可计算出窗口的大小，已经这个窗口内元素的sum值。如下图所示，k值等于3，那么窗口里包含的元素就是：`[7, 1, 4]`，总和为`12`。那么，窗口向前移动一位，由于是**环形数组**，所以，此时窗口内新增了元素5，而原窗口末尾的元素7被排除出去了，所以，这个窗口的总和就是：**上一个窗口sum + 新加入的head元素 - 上一个窗口的tail元素**，即：`12 + 5 - 7 = 10`。下面的计算方式依次类推即可。
+
+![1.png](https://pic.leetcode-cn.com/1663983813-vSSQST-1.png)
+
+# 代码实现
+
+* java
+
+```java
+class Solution {
+    public int[] decrypt(int[] code, int k) {
+        int[] result = new int[code.length];
+        if (k == 0) return result;
+        int sum = 0, count = Math.abs(k), head = k > 0 ? 0 : code.length - 1, tail = k > 0 ? 1 : 0;       
+        // 计算第一个窗口的sum值
+        while (count-- > 0) 
+            sum += k > 0 ? code[head = (head + 1) % code.length] : code[tail = (tail - 1 + code.length) % code.length];       
+        // 移动窗口并计算sum值
+        result[0] = sum; 
+        for (int i = 1; i < code.length; i++) {
+            result[i] = sum + code[++head % code.length] - code[tail];
+            sum = result[i];
+            tail = ++tail % code.length;;
+        }
+        return result;
+    }
+}
+```
+
+![1.png](https://pic.leetcode-cn.com/1663983834-joGCJN-1.png)
+
+今天的文章内容就这些了：
+
+> 写作不易，笔者几个小时甚至数天完成的一篇文章，只愿换来您几秒钟的 **点赞** & **分享** 。
+
+更多技术干货，欢迎大家关注公众号“**爪哇缪斯**” ~ \\(^o^)/ ~ 「干货分享，每天更新」
