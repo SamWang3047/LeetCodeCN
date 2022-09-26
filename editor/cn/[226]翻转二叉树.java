@@ -65,6 +65,7 @@ class Solution {
                 TreeNode temp = node.left;
                 node.left = node.right;
                 node.right = temp;
+
                 preOrderTraverse(node.left);
                 preOrderTraverse(node.right);
             }
