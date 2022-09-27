@@ -1,0 +1,64 @@
+## 模拟
+
+根据题意，对两字符串进行词频统计，统计过程中使用变量 `tot` 记录词频不同的字符个数。
+
+代码：
+
+* []
+
+```Java
+class Solution {
+    public boolean CheckPermutation(String s1, String s2) {
+        int n = s1.length(), m = s2.length(), tot = 0;
+        if (n != m) return false;
+        int[] cnts = new int[256];
+        for (int i = 0; i < n; i++) {
+            if (++cnts[s1.charAt(i)] == 1) tot++;
+            if (--cnts[s2.charAt(i)] == 0) tot--;
+        }
+        return tot == 0;
+    }
+}
+```
+
+* []
+
+```TypeScript
+function CheckPermutation(s1: string, s2: string): boolean {
+    let n = s1.length, m = s2.length, tot = 0
+    if (n != m) return false
+    const cnts = new Array<number>(256).fill(0)
+    for (let i = 0; i < n; i++) {
+        if (++cnts[s1.charCodeAt(i)] == 1) tot++
+        if (--cnts[s2.charCodeAt(i)] == 0) tot--
+    }
+    return tot == 0
+};
+```
+
+* []
+
+```Python
+class Solution:
+    def CheckPermutation(self, s1: str, s2: str) -> bool:
+        return Counter(s1) == Counter(s2)
+```
+
+* 时间复杂度：$O(n)$
+* 空间复杂度：$O(C)$，其中 $C = 256$ 为字符集大小
+
+---
+
+## 加餐
+
+题太简单？加餐一道笔试题 : **[【面试高频题】难度 2/5，超常规多语言多解法笔试题](https://mp.weixin.qq.com/s?__biz=MzU4NDE3MTEyMA==&mid=2247493648&idx=1&sn=3170a7d85989458bf119fc4a98ce0d4f) 🎉🎉**
+
+---
+
+## 最后
+
+**如果有帮助到你，请给题解点个赞和收藏，让更多的人看到 ~ ("▔□▔)/**
+
+也欢迎你 [关注我](https://oscimg.oschina.net/oscnet/up-19688dc1af05cf8bdea43b2a863038ab9e5.png) 和 加入我们的[「组队打卡」](https://leetcode-cn.com/u/ac_oier/)小群 ，提供写「证明」&「思路」的高质量题解。
+
+所有题解已经加入 [刷题指南](https://github.com/SharingSource/LogicStack-LeetCode/wiki)，欢迎 star 哦 ~
