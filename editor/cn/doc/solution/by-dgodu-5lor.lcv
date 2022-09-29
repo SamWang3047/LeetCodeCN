@@ -1,0 +1,40 @@
+![java.png](https://pic.leetcode-cn.com/1662651118-cnPqdr-java.png)
+
+* 
+
+```
+class Solution {
+    public int[] sortEvenOdd(int[] nums) {
+        for(int i=0;i<nums.length;i++){
+            insertSort(nums,i);
+        }
+        return nums;
+    }
+    public void insertSort(int[] nums,int index){
+        int flag=index-2;
+        if(flag<0){
+            return;
+        }
+        int num=nums[index];
+        //插入排序
+        if(index%2==0){//偶数
+            while(flag>=0&& nums[flag]>num){
+                swap(nums,flag,flag+2);
+                flag-=2;
+            }
+        }else{//奇数
+            while(flag>=0&&nums[flag]<num){
+                swap(nums,flag,flag+2);
+                flag-=2;
+            }
+        }
+        
+    }
+    public void swap(int[] nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+}
+```
+

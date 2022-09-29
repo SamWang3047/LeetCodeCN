@@ -1,0 +1,87 @@
+**方法一：字符计数**
+
+先判断两个字符串的长度是否相等，若不相等则直接返回 `false`。
+
+然后用一个数组或哈希表统计字符串 $s1$ 中字符出现的次数。
+
+接着遍历另一个字符串 $s2$，每遍历到一个字符，就将该字符对应的次数减一，如果减一后的次数小于 $0$，则说明两个字符串中字符出现的次数不同，直接返回 `false`。
+
+最后遍历完字符串 $s2$，返回 `true`。
+
+注意：本题测试用例所有字符串仅包含小写字母，因此我们可以直接开一个长度为 $26$ 的数组来计数。
+
+* [sol1-Python3]
+
+```python
+class Solution:
+    def CheckPermutation(self, s1: str, s2: str) -> bool:
+        return Counter(s1) == Counter(s2)
+```
+
+* [sol1-Java]
+
+```java
+class Solution {
+    public boolean CheckPermutation(String s1, String s2) {
+        if (s1.length() != s2.length()) {
+            return false;
+        }
+        int[] cnt = new int[26];
+        for (char c : s1.toCharArray()) {
+            ++cnt[c - 'a'];
+        }
+        for (char c : s2.toCharArray()) {
+            if (--cnt[c - 'a'] < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+* [sol1-C++]
+
+```cpp
+class Solution {
+public:
+    bool CheckPermutation(string s1, string s2) {
+        if (s1.size() != s2.size()) return false;
+        int cnt[26] = {0};
+        for (char & c : s1) ++cnt[c - 'a'];
+        for (char & c : s2) if (--cnt[c - 'a'] < 0) return false;
+        return true;
+    }
+};
+```
+
+* [sol1-Go]
+
+```go
+func CheckPermutation(s1 string, s2 string) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	cnt := make([]int, 26)
+	for _, c := range s1 {
+		cnt[c-'a']++
+	}
+	for _, c := range s2 {
+		cnt[c-'a']--
+		if cnt[c-'a'] < 0 {
+			return false
+		}
+	}
+	return true
+}
+```
+
+**复杂度分析：**
+
+时间复杂度 $O(n)$，空间复杂度 $O(C)$。
+
+其中 $n$ 为字符串的长度，而 $C$ 为字符集的大小，本题 $C=26$。
+
+---
+
+有任何问题，欢迎评论区交流。也可以点个赞支持一下作者哈😄~

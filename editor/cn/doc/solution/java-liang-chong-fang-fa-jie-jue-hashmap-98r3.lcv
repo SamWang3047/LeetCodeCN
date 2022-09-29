@@ -1,0 +1,64 @@
+# 1、非HashMap
+
+![1637546746.jpg](https://pic.leetcode-cn.com/1637546889-fBasde-1637546746.jpg)
+
+* java
+
+```java
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        for (int i = 0; i < words.length - 1; i++) {
+            if (compare(words[i], words[i + 1], order)) continue;
+            else return false;
+        }
+        return true;
+    }
+
+    private boolean compare(String f, String l, String order) {
+        if (f.equals(l)) return true;
+        int small = Math.min(f.length(), l.length());
+        for (int i = 0; i < small; i++) {
+            if (f.charAt(i) == l.charAt(i)) continue;
+            else {
+                for (int k = 0; k < order.length(); k++) {
+                    if (order.charAt(k) == f.charAt(i) || order.charAt(k) == l.charAt(i))
+                        return order.charAt(k) == f.charAt(i) ? true : false;
+                }
+            }
+        }
+        if (f.length() < l.length()) return true;
+        return false;
+    }
+}
+```
+
+# 2、HashMap
+
+![1637546780(1).jpg](https://pic.leetcode-cn.com/1637546912-TnYluy-1637546780(1).jpg)
+
+* java
+
+```java
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < order.length(); i++) {
+            map.put(order.charAt(i), i);
+        }
+        for (int i = 0; i < words.length - 1; i++) {
+            String w1 = words[i];
+            int w1_len = w1.length();
+            String w2 = words[i + 1];
+            int w2_len = w2.length();
+            for (int j = 0; j < Math.max(w1_len, w2_len); j++) {
+                int idx_w1 = j >= w1_len ? -1 : map.get(w1.charAt(j));
+                int idx_w2 = j >= w2_len ? -1 : map.get(w2.charAt(j));
+                if (idx_w1 > idx_w2) return false;
+                if (idx_w1 < idx_w2) break;
+            }
+        }
+        return true;
+    }
+}
+```
+

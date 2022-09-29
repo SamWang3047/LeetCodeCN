@@ -1,0 +1,282 @@
+#### 方法一：模拟
+
+**思路**
+
+首先，如果 $s_1$ 和 $s_2$ 的长度不一样，那么无论怎么轮转，$s_1$ 都不能得到 $s_2$，返回 $\text{false}$。在长度一样（都为 $n$）的前提下，假设 $s_1$ 轮转 $i$ 位，则与 $s_2$ 中的某一位字符 $s_2[j]$ 对应的原 $s_1$ 中的字符应该为 $s_1[(i+j) \bmod n]$。在固定 $i$ 的情况下，遍历所有 $j$，若对应字符都相同，则返回 $\text{true}$。否则，继续遍历其他候选的 $i$。若所有的 $i$ 都不能使 $s_1$ 变成 $s_2$，则返回 $\text{false}$。
+
+**代码**
+
+* [sol1-Python3]
+
+```Python
+class Solution:
+    def isFlipedString(self, s1: str, s2: str) -> bool:
+        m, n = len(s1), len(s2)
+        if m != n:
+            return False
+        if n == 0:
+            return True
+        for i in range(n):
+            for j in range(n):
+                if s1[(i + j) % n] != s2[j]:
+                    break
+            else:
+                return True
+        return False
+```
+
+* [sol1-Java]
+
+```Java
+class Solution {
+    public boolean isFlipedString(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        if (m != n) {
+            return false;
+        }
+        if (n == 0) {
+            return true;
+        }
+        for (int i = 0; i < n; i++) {
+            boolean flag = true;
+            for (int j = 0; j < n; j++) {
+                if (s1.charAt((i + j) % n) != s2.charAt(j)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+* [sol1-C#]
+
+```C#
+public class Solution {
+    public bool IsFlipedString(string s1, string s2) {
+        int m = s1.Length, n = s2.Length;
+        if (m != n) {
+            return false;
+        }
+        if (n == 0) {
+            return true;
+        }
+        for (int i = 0; i < n; i++) {
+            bool flag = true;
+            for (int j = 0; j < n; j++) {
+                if (s1[(i + j) % n] != s2[j]) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+* [sol1-C++]
+
+```C++
+class Solution {
+public:
+    bool isFlipedString(string s1, string s2) {
+        int m = s1.size(), n = s2.size();
+        if (m != n) {
+            return false;
+        }
+        if (n == 0) {
+            return true;
+        }
+        for (int i = 0; i < n; i++) {
+            bool flag = true;
+            for (int j = 0; j < n; j++) {
+                if (s1[(i + j) % n] != s2[j]) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+```
+
+* [sol1-C]
+
+```C
+bool isFlipedString(char* s1, char* s2) {
+    int m = strlen(s1), n = strlen(s2);
+    if (m != n) {
+        return false;
+    }
+    if (n == 0) {
+        return true;
+    }
+    for (int i = 0; i < n; i++) {
+        bool flag = true;
+        for (int j = 0; j < n; j++) {
+            if (s1[(i + j) % n] != s2[j]) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+* [sol1-JavaScript]
+
+```JavaScript
+var isFlipedString = function(s1, s2) {
+    const m = s1.length, n = s2.length;
+    if (m !== n) {
+        return false;
+    }
+    if (n === 0) {
+        return true;
+    }
+    for (let i = 0; i < n; i++) {
+        let flag = true;
+        for (let j = 0; j < n; j++) {
+            if (s1[(i + j) % n] !== s2[j]) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return true;
+        }
+    }
+    return false;
+};
+```
+
+* [sol1-Golang]
+
+```go
+func isFlipedString(s1 string, s2 string) bool {
+    n := len(s1)
+    if n != len(s2) {
+        return false
+    }
+    if n == 0 {
+        return true
+    }
+next:
+    for i := 0; i < n; i++ {
+        for j := 0; j < n; j++ {
+            if s1[(i+j)%n] != s2[j] {
+                continue next
+            }
+        }
+        return true
+    }
+    return false
+}
+```
+
+**复杂度分析**
+
+- 时间复杂度：$O(n^2)$，其中 $n$ 是字符串 $s_1$ 的长度。我们需要双重循环来判断。
+
+- 空间复杂度：$O(1)$。仅使用常数空间。
+
+#### 方法二：搜索子字符串
+
+**思路**
+
+首先，如果 $s_1$ 和 $s_2$ 的长度不一样，那么无论怎么轮转，$s_1$ 都不能得到 $s_2$，返回 $\text{false}$。字符串 $s + s$ 包含了所有 $s_1$ 可以通过轮转操作得到的字符串，只需要检查 $s_2$ 是否为 $s + s$ 的子字符串即可。具体可以参考「[28. 实现 strStr() 的官方题解](https://leetcode-cn.com/problems/implement-strstr/solution/shi-xian-strstr-by-leetcode-solution-ds6y/)」的实现代码，本题解中采用直接调用库函数的方法。
+
+**代码**
+
+* [sol2-Python3]
+
+```Python
+class Solution:
+    def isFlipedString(self, s1: str, s2: str) -> bool:
+        return len(s1) == len(s2) and s2 in s1 + s1
+```
+
+* [sol2-Java]
+
+```Java
+class Solution {
+    public boolean isFlipedString(String s1, String s2) {
+        return s1.length() == s2.length() && (s1 + s1).contains(s2);
+    }
+}
+```
+
+* [sol2-C#]
+
+```C#
+public class Solution {
+    public bool IsFlipedString(string s1, string s2) {
+        return s1.Length == s2.Length && (s1 + s1).Contains(s2);
+    }
+}
+```
+
+* [sol2-C++]
+
+```C++
+class Solution {
+public:
+    bool isFlipedString(string s1, string s2) {
+        return s1.size() == s2.size() && (s1 + s1).find(s2) != string::npos;
+    }
+};
+```
+
+* [sol2-C]
+
+```C
+bool isFlipedString(char* s1, char* s2) {
+    int m = strlen(s1), n = strlen(s2);
+    if (m != n) {
+        return false;
+    }
+    char * str = (char *)malloc(sizeof(char) * (m + n + 1));
+    sprintf(str, "%s%s", s2, s2);
+    return strstr(str, s1) != NULL;
+}
+```
+
+* [sol2-JavaScript]
+
+```JavaScript
+var isFlipedString = function(s1, s2) {
+    return s1.length === s2.length && (s1 + s1).indexOf(s2) !== -1;
+};
+```
+
+* [sol2-Golang]
+
+```go
+func isFlipedString(s1 string, s2 string) bool {
+   return len(s1) == len(s2) && strings.Contains(s1+s1, s2)
+}
+```
+
+**复杂度分析**
+
+- 时间复杂度：$O(n)$，其中 $n$ 是字符串 $s_1$ 的长度。$\text{KMP}$ 算法搜索子字符串的时间复杂度为 $O(n)$，其他搜索子字符串的方法会略有差异。
+
+- 空间复杂度：$O(n)$，其中 $n$ 是字符串 $s_1$ 的长度。$\text{KMP}$ 算法搜索子字符串的空间复杂度为 $O(n)$，其他搜索子字符串的方法会略有差异。
+

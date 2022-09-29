@@ -1,0 +1,25 @@
+### 解题思路
+
+1.如果两个字符串都是空，则返回true;
+2.如果是不为空，s2为空，返回false;
+3.对于普通情况，用两个s1拼接成一个新的字符串，如果其中包含s2，则返回true;
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public boolean isFlipedString(String s1, String s2) {
+        if(s1.length()==0&&s2.length()==0){
+            return true;
+        }
+        if(s2.length()==0){
+            return false;
+        }
+        String str = s1+s1;
+        return str.contains(s2);
+    }
+}
+```
+

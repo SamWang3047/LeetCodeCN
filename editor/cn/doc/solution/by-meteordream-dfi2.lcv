@@ -1,0 +1,48 @@
+## 模拟
+
+统计所有字符串中所有字符的个数然后比较即可
+
+* []
+
+```Python
+class Solution:
+    def CheckPermutation(self, s1: str, s2: str) -> bool:
+        return len(s1) == len(s2) and Counter(s1) == Counter(s2)
+```
+
+* []
+
+```Java
+class Solution {
+    public boolean CheckPermutation(String s1, String s2) {
+        int[] cnt = new int[256];
+        if (s1.length() != s2.length()) return false;
+        for (int i = 0, n = s1.length(); i < n; ++i) cnt[s1.charAt(i)]++;
+        for (int i = 0, n = s2.length(); i < n; ++i) if (--cnt[s2.charAt(i)] < 0) return false;
+        for (int i = 0; i < 256; ++i) if (cnt[i] != 0) return false;
+        return true;
+    }
+}
+```
+
+* []
+
+```C++
+class Solution {
+public:
+    bool CheckPermutation(string s1, string s2) {
+        int cnt[256]{0};
+        for (char c: s1) cnt[c]++;
+        for (char c: s2) if (--cnt[c] < 0) return false;
+        for (int i = 0; i < 256; ++i) if (cnt[i] != 0) return false;
+        return true;
+    }
+};
+```
+
+- 时间复杂度: $O(n)$
+- 空间复杂度: $O(n)$, 字符串种类是有限的，也可以认为是 $O(1)$
+
+---
+
+**如果对你有帮助的话，请给我点个赞吧**~
