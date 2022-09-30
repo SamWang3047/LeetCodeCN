@@ -1,0 +1,79 @@
+# 解题思路
+
+根据题目描述，给我们一个矩阵**M * N**，需要将某个`元素为0`的行和列都**清零**，那么，我们首先创建两个数组：
+
+> **int[] rowsOfZero**：用于存储元素值`等于0`的**行**的集合，数组长度为M，默认元素值都是`0`；
+> **int[] columnsOfZero**：用于存储元素值`等于0`的**列**的集合，数组长度为N，默认元素值都是`0`；
+
+然后，我们就遍历入参`matrix`矩阵，找到**元素值等于0**的元素，然后将其`行号`&`列号`对应到上面的两个数组，并将其**修改为1**。我们以下图为例，遍历下图中的矩阵，我们找到了`[0, 0]`和`[0, 3]`这两个元素的值等于0，那么这两个元素对应的行号都是：0，对应的列号分别是：0和3。那么，映射到上面提到的两个数组，就变成了：rowsOfZero=`[1, 0, 0]`  和 columnsOfZero=`[1, 0, 0, 1]`。具体如下图所示：
+
+![image.png](https://pic.leetcode-cn.com/1664500241-wbIkcS-image.png)
+
+确定好了`rowsOfZero`和`columnsOfZero`之后，我们再去遍历这两个数组，只要发现**rowsOfZero[i] == 1 或者colunmsOfZero[j] == 1**，那么我们就可以将元素`[i, j]`赋值为0。具体操作如下图所示：
+
+![image.png](https://pic.leetcode-cn.com/1664500250-IUTxtv-image.png)
+
+下面的两种实现方式，其实主要就在于采用哪种数据结构去存储**行等于0的集合**（`rowsOfZero`）以及**列等于0的集合**（`columnsOfZero`）。具体请见如下两种代码实现。
+
+# 代码实现
+
+## 1> 实现1：采用数组结构
+
+* java
+
+```java
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int[] rowsOfZero = new int[matrix.length], colunmsOfZero = new int[matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) 
+            for (int j = 0; j < matrix[i].length; j++) 
+                if (matrix[i][j] == 0) rowsOfZero[i] = colunmsOfZero[j] = 1;
+
+        for (int i = 0; i < rowsOfZero.length; i++) 
+            for (int j = 0; j < colunmsOfZero.length; j++) 
+                if (rowsOfZero[i] == 1 || colunmsOfZero[j] == 1) matrix[i][j] = 0;
+    }
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1664500264-WwjgjK-image.png)
+
+## 2> 实现2：采用Set结构
+
+* java
+
+```java
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        Set<Integer> rowsOfZero = new HashSet(), colunmsOfZero = new HashSet();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == 0) {
+                    rowsOfZero.add(i);
+                    colunmsOfZero.add(j);
+                }
+            }
+        }
+
+        for (Integer row : rowsOfZero) {
+            for (int i = 0; i < matrix[row].length; i++) {
+                matrix[row][i] = 0;
+            }
+        }
+
+        for (Integer colunm : colunmsOfZero) {
+            for (int i = 0; i < matrix.length; i++) {
+                matrix[i][colunm] = 0;
+            }
+        }
+    }
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1664500275-hTSrVJ-image.png)
+
+今天的文章内容就这些了：
+
+> 写作不易，笔者几个小时甚至数天完成的一篇文章，只愿换来您几秒钟的 **点赞** & **分享** 。
+
+更多技术干货，欢迎大家关注公众号“**爪哇缪斯**” ~ \\(^o^)/ ~ 「干货分享，每天更新」
