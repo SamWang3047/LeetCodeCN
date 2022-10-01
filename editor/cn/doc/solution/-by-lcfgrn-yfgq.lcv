@@ -1,0 +1,44 @@
+### 解题思路
+
+#### 提示一
+
+可以先全部消除空格和'-'，并按3切分，然后分情况讨论，来修正：
+1. 剩2个数字，不做处理
+2. 剩3个数字，将sb末尾的'-'去掉
+3. 剩4个数字，去掉最后一个'-'去掉，并补上一个'-'
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public String reformatNumber(String number) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (char c : number.toCharArray()) {
+            if (c == ' ' || c == '-') {
+                continue;
+            }
+            sb.append(c);
+            if (++count % 3 == 0) {
+                sb.append('-');
+            }
+        }
+        // 如果按3切分，还剩4个
+        if (count % 3 == 1) {
+            // 去掉倒数的'-'
+            sb.deleteCharAt(sb.length() - 2);
+            // 插入'-'
+            sb.insert(sb.length() - 2, '-');
+        } else if (count % 3 == 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        } else {
+            // 按3切分，还剩2，不处理
+        }
+        return sb.toString();
+    }
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1664605506-qGrVZr-image.png)
