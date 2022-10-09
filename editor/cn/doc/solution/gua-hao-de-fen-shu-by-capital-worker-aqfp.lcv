@@ -1,0 +1,38 @@
+# 方法一：计算贡献值
+
+- 根据规则1，只有`()`会产生得分。
+- 根据规则2，我们将每个`()`的贡献值相加。
+- 根据规则3，我们计算每个`()`的深度，即可得出当前`()`的贡献值，贡献值为`2 ^ dep`，`dep`为当前括号的深度，初始时深度为`0`。
+
+因此我们只需要计算每个`()`的贡献值和深度，然后相加即可.
+
+**代码如下**
+
+* java
+
+```java
+public int scoreOfParentheses(String s) {
+    //深度
+    int dep = 0;
+    //贡献值
+    int ans = 0;
+    char[] chars = s.toCharArray();
+    for (int i = 0; i < chars.length; i++) {
+        char aChar = chars[i];
+        //计算深度
+        dep += aChar == '(' ? 1 : -1;
+        //找到一对 ()
+        if (aChar == ')' && i >= 1 && chars[i - 1] == '(') {
+            //计算贡献值
+            ans += 1 << dep;
+        }
+    }
+    return ans;
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1665280772-RxYmhf-image.png)
+
+写题解不易，**如果对您有帮助，记得关注 + 点赞 + 收藏呦！！！**
+
+**每天都会更新每日一题题解，大家加油！！**

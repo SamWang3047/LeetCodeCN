@@ -1,0 +1,94 @@
+## 栈模拟
+
+关于括号的问题多半要用到栈，这题也不例外，有题意得：
+
+- 如果是嵌套括号，得分要乘二
+- 如果是并列，得分相加
+
+所以关键是判断出栈的右括号是嵌套还是并列，其实很简单，只需要结合前一个括号就能很容易判断
+
+- 如果 `)` 前面是 `(`, 即 `()`, 那毫无疑问是并列的
+- 如果 `)` 前面还是 `)`, 即 `...))`, 那自然是嵌套的
+
+然后我们将每层的分数叠加到栈顶，最后得分就是题目所求
+
+* []
+
+```Python
+class Solution:
+    def scoreOfParentheses(self, s: str) -> int:
+        st = [0]
+        pre = ')'
+        for c in s:
+            if c == '(':
+                st.append(0)
+            else:
+                cur = st.pop()
+                if pre == '(':
+                    cur += 1
+                else:
+                    cur *= 2
+                st[-1] += cur
+            pre = c
+        return st[0]
+```
+
+* []
+
+```Java
+class Solution {
+    public int scoreOfParentheses(String s) {
+        int ans = 0, pre = ')';
+        Deque<Integer> st = new ArrayDeque<>();
+        for (int i = 0, n = s.length(); i < n; ++i) {
+            char c = s.charAt(i);
+            if (c == '(') st.addLast(0);
+            else {
+                int cur = st.pollLast(); 
+                if (pre == '(') cur++;
+                else cur *= 2;
+                if (st.isEmpty()) ans += cur;
+                else {
+                    int tmp = st.pollLast() + cur;
+                    st.addLast(tmp);
+                }
+            }
+            pre = c;
+        }
+        return ans;
+    }
+}
+```
+
+* []
+
+```C++
+class Solution {
+public:
+    int scoreOfParentheses(string s) {
+        int ans = 0, pre = ')';
+        vector<int> st;
+        for (char c: s) {
+            if (c == '(') st.push_back(0);
+            else {
+                int cur = st.back(); st.pop_back();
+                if (pre == '(') cur++;
+                else cur *= 2;
+                if (st.empty()) ans += cur;
+                else {
+                    st[st.size() - 1] += cur;
+                }
+            }
+            pre = c;
+        }
+        return ans;
+    }
+};
+```
+
+- 时间复杂度: $O(n)$
+- 空间复杂度: $O(n)$
+
+---
+
+**如果对你有帮助的话，请给我点个赞吧**~

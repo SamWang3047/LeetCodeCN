@@ -1,0 +1,39 @@
+# 时/空复杂度
+
+![123.png](https://pic.leetcode-cn.com/1665285876-jtEFdO-123.png)
+
+# 思路
+
+- 首先定义num和sum，num作为结果记录，而sum记录每一组括号的分数。
+- 开一个tmp布尔值作为是否将sum 加入 num 中的标志，因为当遇到‘）’的时候，我们只需要将当前的sum加入一次即可，因为sum记录就是用‘（’作为标准的，因此只需要加一次。
+- 用k作为当前括号层数记录，以0为分界点，每当k = 0，就代表将记录下一组括号的分数。
+- 遍历字符串，如果是‘（’，那么我们需要判断k是否为0从而确认当前sum的值。如果k != 0，那么我们将sum *= 2,也就是进2，否则sum置零。
+- 如果是‘）’，那么我们需要在第一次，即tmp = true 的时候将sum的值记录到num中，需要注意的是，无论tmp如何，只要遇到‘）’，我们就需要将sum的值除以2，也就是退2，同时k--。
+
+# 代码
+
+* 
+
+```
+class Solution {
+public:
+    int scoreOfParentheses(string s) {
+        int num = 0, sum = 0, k = 0;
+        bool tmp = false;
+        for(int i = 0; i < s.size(); ++ i){
+            if(s[i] == '('){
+                if(k){
+                    sum *= 2, tmp = true,++ k;
+                }else {
+                    sum = 1,tmp = true,++ k;
+                }
+            }else{
+                if(tmp) num += sum, tmp = false,sum /= 2,--k;
+                else sum /= 2, --k;
+            }
+        }
+        return num;
+    }
+};
+```
+

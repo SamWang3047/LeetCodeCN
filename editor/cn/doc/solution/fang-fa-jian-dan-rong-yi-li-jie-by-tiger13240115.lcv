@@ -1,0 +1,135 @@
+### 解题思路
+
+代码有具体注释，再以“1-2--3--4-5--6--7”为例，debug跟一下，上图：
+![image.png](https://pic.leetcode-cn.com/9e79de169653e6b786f2b8c9f0acc8413fcbe90d46f9060555506365a49ab1e2-image.png)
+
+- i=0
+  stack：
+  ![image.png](https://pic.leetcode-cn.com/814e4de797bdd94014bc53bf9a2c3eb02edbea5c1fcfc557aa715efc77b3abae-image.png)
+  root：
+  ![image.png](https://pic.leetcode-cn.com/7f25bc2d31c96ece7b8f6b25b0340089aca3ea8e18f0e920f780537e2ea38626-image.png)
+
+- i=2
+  cutLevel=1,prevLevel=0 =>左子树
+  stack:
+  ![image.png](https://pic.leetcode-cn.com/ef3b6a1e27f01355bbd1dfacd52313d2b629de7d65754292857eb7b3c8683a26-image.png)
+  root:
+  ![image.png](https://pic.leetcode-cn.com/02332510c147ec05238e6595389b31321668e9132944d5d2965c0c5bf1178c1d-image.png)
+
+- i=5
+  cutLevel=2,prevLevel=1 =>左子树
+  stack:
+  ![image.png](https://pic.leetcode-cn.com/630ffe75e2578e6bc451ed2e386adb49219c6768220181cb8a166594179d55eb-image.png)
+  root:
+  ![image.png](https://pic.leetcode-cn.com/877d3efbb87b9b6b399fa3e6b6fb0aa6e10a6307e84977659bc367b554f9fff7-image.png)
+
+- i=8
+  cutLevel=2,prevLevel=2 =>右子树
+  此时stack.size()=3，当前节点（val=4）为节点2的右节点，所以需要取出节点2，栈顶节点3出栈
+  stack:
+  ![image.png](https://pic.leetcode-cn.com/95039a18e715150339a587c2a7af9fa83fa5e25a3ee2a8ffaa306cc57cb72551-image.png)
+  root:
+  ![image.png](https://pic.leetcode-cn.com/1f7afc719c4637fe24dba5edb21b643dcbf7490efa4388164a1832a85959b03f-image.png)
+
+- i=10
+  cutLevel=1,prevLevel=2 =>右子树
+  此时stack.size()=3，当前节点（val=5）为节点1的右节点，所以需要取出节点1，栈顶节点4、节点2出栈
+  ![image.png](https://pic.leetcode-cn.com/60114d494cad04049c9275cfeb717af2f53a1ce4056c83809071c62679ddbca5-image.png)
+  stack：
+  ![image.png](https://pic.leetcode-cn.com/8baf95209ecc1e831f5e0ed0fe19a394f4953bb7ede3d13e88ffb7b0337985ca-image.png)
+  root：
+  ![image.png](https://pic.leetcode-cn.com/66792e85b12872f2052e9449b05c02789c534fe569e0ce1323e9ddd48511ba18-image.png)
+
+- i=13、i=16
+  重复前面的操作，直到i>=s.length()循环结束
+  最终root：
+  ![image.png](https://pic.leetcode-cn.com/d8fa7da78f0fe516c5eaac287d10c7e5a95186aa22a216c324b9fce4ebc94060-image.png)
+
+### 代码
+
+* java
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode recoverFromPreorder(String s) {
+        //最终的返回的根节点
+        TreeNode root = null;
+        Stack<TreeNode> stack = new Stack<>();
+
+        //记录上一次遍历到第几层
+        int prevLevel = 0;
+
+        //当前层
+        int cutLevel = 0;
+
+        //节点值
+        int val = 0;
+        int i = 0;
+        while (i < s.length()){
+
+            /**
+             * 如果root==null，先设置根节点
+             */
+            if(root == null){
+                //因为节点的值介于 1 和 10 ^ 9 之间，所以需要遍历计算val
+                while (i < s.length() && Character.isDigit(s.charAt(i))){
+                    val = val * 10 + (s.charAt(i) -  '0');
+                    i ++;
+                }
+                root = new TreeNode(val);
+
+                //根节点入栈
+                stack.push(root);
+            }else if(s.charAt(i) == '-'){
+                cutLevel ++;
+                i++;
+            }else {
+                val = 0;
+                while (i < s.length() && Character.isDigit(s.charAt(i))){
+                    val = val * 10 + (s.charAt(i) -  '0');
+                    i ++;
+                }
+                /**
+                 * 左子树
+                 * 如果当前cutLevel > prevLevel,说明是下一级，取栈顶节点
+                 * */
+                if(cutLevel > prevLevel){
+                    TreeNode node = stack.pop();
+                    node.left = new TreeNode(val);
+                    //入栈的时候，需要将之前栈顶元素先入栈，然后node.left或者node.right再入栈
+                    stack.push(node);
+                    stack.push(node.left);
+                    //然后cutLevel赋给prevLevel，cutLevel置0
+                    prevLevel = cutLevel;
+                    cutLevel = 0;
+                } else {
+                    /**
+                     * 右子树
+                     * 根据cutLevel的值，回溯到上一级
+                     */
+                    while (stack.size() > cutLevel){
+                        stack.pop();
+                    }
+                    TreeNode node = stack.pop();
+                    node.right = new TreeNode(val);
+                    stack.push(node);
+                    stack.push(node.right);
+                    prevLevel = cutLevel;
+                    cutLevel = 0;
+                }
+            }
+        }
+        return root;
+    }
+}
+```
+
