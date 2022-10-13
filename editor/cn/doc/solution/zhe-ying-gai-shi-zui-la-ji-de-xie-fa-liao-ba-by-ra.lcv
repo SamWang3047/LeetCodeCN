@@ -1,0 +1,109 @@
+### 解题思路
+
+正则来处理吧。
+
+### 代码
+
+* java
+
+```java
+import java.util.regex.*;
+class Solution {
+    // 考虑到最复杂的情况 数字之中有非数字字符 也可以转换为数字
+    /* 匹配的 第一项 是 符号
+              第二项 是 数字
+              第三项 是 字母
+              第四项 是 数字
+    */
+    public statit String regx = "^(\\+?|(-?))([0-9]+)([a-zA-Z\\s]*)(\\.?[0-9]*).*$";
+    public int myAtoi(String str) {
+        long res = 0;
+        // 去掉前后的空字符
+        str = str.trim();
+        // 判断是否是数字
+        boolean result = isNum(str);
+        // 如果是数字
+        if(result){
+            // 转换结果
+            res = tranFromNum(str);
+            if(res > Integer.MAX_VALUE){
+                res = Integer.MAX_VALUE;
+            }else if(res < Integer.MIN_VALUE){
+                res = Integer.MIN_VALUE;
+            }
+        }
+        return (int)res;
+    }
+    /**
+    *
+    *  将string转换为整形
+    */
+    public long tranFromNum(String str){
+        
+        if( str.length() == 0 )return 0;
+
+        Pattern r = Pattern.compile(Solution.regx);
+        Matcher m = r.matcher(str);
+        if(m.find()){
+           String res ="";
+            //如果 前面的符号不是空的 
+        	if(m.group(2) !=  null) {
+        		res += m.group(2);
+        	}
+            // 把匹配的第一部分的数字加上
+        	res += m.group(3);  
+            // 如果数字中间没有匹配到字母，那么把第三部分加上
+        	if(m.group(4) == null) {
+        		res += m.group(5);
+        	}
+            // 把提取到的数字字符串转换为 整数
+            return StringToInt(res);
+        }else return 0;
+    }
+    public long StringToInt(String str){
+        long res = 0;
+        boolean isNegative = false;
+        
+        //说明是负数
+        if( str.charAt(0) == '-' ){
+            //切割掉无意义的字符
+            str = str.substring(1);
+            //标记为负数 ，然后转换
+            isNegative = true;
+        //说明是正数
+        }else if( str.charAt(0) == '+' ){
+            
+            str = str.substring(1);
+        }
+        int j = 0;
+        // 遍历当前数字字符串
+        for (int i = str.length()-1 ; i >= 0 ; i--) {
+            //如果是小数点
+            if(str.charAt(i) == '.'){
+                // 结果应该变成小数
+                res = (int)(res*Math.pow(10,-j));
+                j = 0;
+                continue;
+            }
+            // 根据ascii码获取到该ascii码对应上的int数值 
+            int num = (int)str.charAt(i)-0x30;
+            
+            num = new Double(num*Math.pow(10,j++)).intValue();
+            res += num;
+        }
+        //取相反数
+        if(isNegative){
+            res = -res;
+        }
+        return res;
+    }
+    public boolean isNum(String str){
+        if (str == null || "".equals(str) ) return false;
+        
+        return Pattern.matches(Solution.regx, str);
+               
+        
+    }
+}
+```
+
