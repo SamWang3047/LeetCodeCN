@@ -1,0 +1,65 @@
+## 模拟
+
+根据题意进行模拟即可：每次我们将当前处理到 `i` 压入栈中（往答案添加一个 `Push`），然后判断当前处理到的 `i` 是否最新的栈顶元素 $target[j]$ 是否相同，若不相同则丢弃元素（往答案添加一个 `Pop`），若存在则将指针 `j` 后移，直到构建出目标答案。
+
+代码：
+
+* []
+
+```Java
+class Solution {
+    public List<String> buildArray(int[] target, int n) {
+        List<String> ans = new ArrayList<>();
+        int m = target.length;
+        for (int i = 1, j = 0; i <= n && j < m; i++) {
+            ans.add("Push");
+            if (target[j] != i) ans.add("Pop");
+            else j++;
+        }
+        return ans;
+    }
+}
+```
+
+* []
+
+```TypeScript
+function buildArray(target: number[], n: number): string[] {
+    const ans = new Array<string>()
+    const m = target.length
+    for (let i = 1, j = 0; i <= n && j < m; i++) {
+        ans.push("Push")
+        if (target[j] != i) ans.push("Pop")
+        else j++
+    }
+    return ans
+}
+```
+
+* []
+
+```Python
+class Solution:
+    def buildArray(self, target: List[int], n: int) -> List[str]:
+        ans = []
+        m, i, j = len(target), 1, 0
+        while i <= n and j < m:
+            ans.append("Push")
+            if target[j] != i:
+                ans.append("Pop")
+            else:
+                j += 1
+            i += 1
+        return ans
+```
+
+* 时间复杂度：$O(n)$
+* 空间复杂度：$O(1)$
+
+---
+
+## 最后
+
+**如果有帮助到你，请给题解点个赞和收藏，让更多的人看到 ~ ("▔□▔)/**
+
+所有题解已经加入 [刷题指南](https://github.com/SharingSource/LogicStack-LeetCode/wiki)，欢迎 star 哦 ~
