@@ -1,0 +1,53 @@
+# 解题思路
+
+根据题目描述，我们只可以拿两种类型的水果，并且获取的顺序是**按照数组fruits的顺序从左向右**的，那么我们可以选择采用**滑动窗口**的方式对窗口内两种类型的水果数量进行计算，并且针对每个窗口中的水果数量进行计算，最终选取**最大值返回**即可。
+
+我们以下图中`fruits = [3,3,3,1,2,1,1,2,3,3,4]`为例，首先我们需要如下几个参数：
+
+> **startIndex**：表示窗口的起点。
+> **diffIndex**：每当发现相邻两个水果不同，则将其指向发生不同的那个水果，当遍历发现有第三种水果的时候，用于将其作为新窗口的起点。
+> **pickRecords**：用于记录当前窗口内选中的水果（下图没有画），默认未选中为0，选中为1；
+> **pickNums**：用于记录当前窗口内，已经选中的水果种类数量。
+> **curFruit**：用于记录当前选中的苹果类型，当发现curFruit与fruits[i]不同时，diffIndex = fruits[i]。
+
+我们从头开始遍历，遍历指针`i`，每当发现遍历到的这个**水果种类fruits[i]与curFruit不同**时，就说明我们拿到了**新的品种**，那么**pickNums加1**，当超过2种的时候，我们就通过`i-startIndex`对窗口内的水果数量进行计算，然后移动窗口，将新窗口的起点设定为`diffIndex`指向的位置，然后继续遍历水果，以此类推进行计算。具体操作如下图所示，此处就不赘述了：
+
+![image.png](https://pic.leetcode-cn.com/1665974374-BymSxk-image.png)
+
+# 代码实现
+
+* java
+
+```java
+class Solution {
+    public int totalFruit(int[] fruits) {
+        int[] pickRecords = new int[fruits.length];
+        int result = 0, startIndex = 0, diffIndex = 0, pickNums = 0, curFruit = 0;
+        for (int i = 0; i < fruits.length; i++) {
+            if (pickRecords[fruits[i]] == 0) {
+                if (pickNums == 2) {
+                    result = Math.max(result, i - startIndex);
+                    pickRecords[fruits[diffIndex - 1]] = 0; // 将水果设置为“未被选择”
+                    startIndex = diffIndex; // 记录“窗口”的开始index
+                    pickNums--; // 已选择的水果种类-1
+                }
+                pickNums++; // 已选择的水果种类+1
+                pickRecords[fruits[i]] = 1; // 将水果设置为“被选择”
+            }
+            if (curFruit != fruits[i]) {
+                curFruit = fruits[i]; // 当前水果类型
+                diffIndex = i; // 记录水果类型变换时的index
+            }
+        }
+        return Math.max(result, fruits.length - startIndex);
+    }
+}
+```
+
+![image.png](https://pic.leetcode-cn.com/1665974384-NazpkX-image.png)
+
+今天的文章内容就这些了：
+
+> 写作不易，笔者几个小时甚至数天完成的一篇文章，只愿换来您几秒钟的 **点赞** & **分享** 。
+
+更多技术干货，欢迎大家关注公众号“**爪哇缪斯**” ~ \\(^o^)/ ~ 「干货分享，每天更新」

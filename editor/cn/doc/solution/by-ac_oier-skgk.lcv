@@ -1,0 +1,75 @@
+## 滑动窗口
+
+这次是真看样例，都理解不了是啥题意：其实就是从任意位置开始，**同时使用**两个篮子采集，一旦选择后不能修改篮子所装的水果种类，当所有树处理完或遇到第一棵种类不同的树则停止。
+
+滑动窗口模拟题：使用 `j` 和 `i` 分别代表滑动窗口的两端，窗口种类不超过 $2$ 种为合法。
+
+代码：
+
+* []
+
+```Java
+class Solution {
+    public int totalFruit(int[] fs) {
+        int n = fs.length, ans = 0;
+        int[] cnts = new int[n + 10];
+        for (int i = 0, j = 0, tot = 0; i < n; i++) {
+            if (++cnts[fs[i]] == 1) tot++;
+            while (tot > 2) {
+                if (--cnts[fs[j++]] == 0) tot--;
+            }
+            ans = Math.max(ans, i - j + 1);
+        }
+        return ans;
+    }
+}
+```
+
+* []
+
+```TypeScript
+function totalFruit(fs: number[]): number {
+    let n = fs.length, ans = 0
+    const cnts = new Array<number>(n + 10).fill(0)
+    for (let i = 0, j = 0, tot = 0; i < n; i++) {
+        if (++cnts[fs[i]] == 1) tot++
+        while (tot > 2) {
+            if (--cnts[fs[j++]] == 0) tot--
+        }
+        ans = Math.max(ans, i - j + 1)
+    }
+    return ans
+}
+```
+
+* []
+
+```Python
+class Solution:
+    def totalFruit(self, fs: List[int]) -> int:
+        n, ans = len(fs), 0
+        j, tot = 0, 0
+        cnts = defaultdict(int)
+        for i in range(n):
+            cnts[fs[i]] += 1
+            if cnts[fs[i]] == 1:
+                tot += 1
+            while tot > 2:
+                cnts[fs[j]] -= 1
+                if cnts[fs[j]] == 0:
+                    tot -= 1
+                j += 1
+            ans = max(ans, i - j + 1)
+        return ans
+```
+
+* 时间复杂度：$O(n)$
+* 空间复杂度：$O(n)$
+
+---
+
+## 最后
+
+**如果有帮助到你，请给题解点个赞和收藏，让更多的人看到 ~ ("▔□▔)/**
+
+所有题解已经加入 [刷题指南](https://github.com/SharingSource/LogicStack-LeetCode/wiki)，欢迎 star 哦 ~
