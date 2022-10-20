@@ -1,0 +1,68 @@
+## 递归（倒推验证）
+
+整理一下条件：首行为 `0`，每次用当前行拓展出下一行时，字符数量翻倍（将 `0` 拓展为 `01`，将 `1` 拓展为 `10`），且字符种类仍为 `01`。
+
+要求我们输出第 $n$ 行第 $k$ 列的字符，我们可以通过「倒推验证」的方式来求解：假设第 $n$ 行第 $k$ 为 `1`，若能倒推出首行为 $0$，说明假设成立，返回 `1`，否则返回 `0`。
+
+倒推验证可通过实现递归函数 `int dfs(int r, int c, int cur)` 来做，含义为当第 $r$ 行第 $c$ 列的字符为 $cur$ 时，首行首列字符为何值。同时实现该函数是容易的：
+
+* 若「当前列 $c$ 为偶数且 $cur = 0$」或「当前列 $c$ 为奇数且 $cur = 1$」时，说明当前列所在的组为 `10`，由此可推出其是由上一行的 `1` 拓展而来，结合每次拓展新行字符数量翻倍的条件，可知是由第 $r - 1$ 行的第 $\left \lfloor \frac{c - 1}{2} \right \rfloor + 1$ 列的 `1` 拓展而来，递归处理；
+* 否则，同理，必然是上一行（第 $r - 1$ 行）对应位置的 `0` 拓展而来，递归处理。
+
+最终，当倒推到首行时，我们找到了递归出口，直接返回 `cur`。
+
+代码：
+
+* []
+
+```Java
+class Solution {
+    public int kthGrammar(int n, int k) {
+        return dfs(n, k, 1) == 0 ? 1 : 0;
+    }
+    int dfs(int r, int c, int cur) {
+        if (r == 1) return cur;
+        if ((c % 2 == 0 && cur == 0) || (c % 2 == 1 && cur == 1)) return dfs(r - 1, (c - 1) / 2 + 1, 1);
+        else return dfs(r - 1, (c - 1) / 2 + 1, 0);
+    }
+}
+```
+
+* []
+
+```TypeScript
+function kthGrammar(n: number, k: number): number {
+    function dfs(r: number, c: number, cur: number): number {
+        if (r == 1) return cur
+        if ((c % 2 == 0 && cur == 0) || (c % 2 == 1 && cur == 1)) return dfs(r - 1, Math.floor((c - 1) / 2) + 1, 1)
+        else return dfs(r - 1, Math.floor((c - 1) / 2) + 1, 0)
+    }
+    return dfs(n, k, 1) == 0 ? 1 : 0
+}
+```
+
+* []
+
+```Python
+class Solution:
+    def kthGrammar(self, n: int, k: int) -> int:
+        def dfs(r, c, cur):
+            if r == 1:
+                return cur
+            if (c % 2 == 0 and cur == 0) or (c % 2 == 1 and cur == 1):
+                return dfs(r - 1, (c - 1) // 2 + 1, 1)
+            else:
+                return dfs(r - 1, (c - 1) // 2 + 1, 0)
+        return 1 if dfs(n, k, 1) == 0 else 0
+```
+
+* 时间复杂度：$O(n)$
+* 空间复杂度：忽略递归带来的额外空间开销，复杂度为 $O(1)$
+
+---
+
+## 最后
+
+**如果有帮助到你，请给题解点个赞和收藏，让更多的人看到 ~ ("▔□▔)/**
+
+所有题解已经加入 [刷题指南](https://github.com/SharingSource/LogicStack-LeetCode/wiki)，欢迎 star 哦 ~

@@ -1,0 +1,51 @@
+> Problem: [779. 第K个语法符号](https://leetcode.cn/problems/k-th-symbol-in-grammar/description/)
+
+[TOC]
+
+# 思路
+
+- 0
+- 01
+- 0110
+- 01101001
+- 0110100110010110
+- ...
+
+通过题中给出的规则，模拟几行数据后发现:
+1) 第n行的前半部分和n-1行相等
+2) 第n的后半部分是前半部分的翻转，也就是n-1行的翻转
+   以上 n >= 2
+
+所以可以进行递归：
+当k > 2^(n-2) 时(注意n从1开始，所以第n行的字符总数是 2^(n-1)个)，求的第k个字符：是n-1行字符的 k-2^(n-2)个字符的翻转，num的翻转可以用 1^num
+否则，是n-1行的第k个字符
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public int kthGrammar(int n, int k) {
+        if (n == 1) {
+            return 0;
+        }
+        if (k > (1 << (n - 2))) {
+            return 1 ^ kthGrammar(n - 1, k - (1 << (n - 2)));
+        }
+        return kthGrammar(n - 1, k);
+    }
+}
+```
+

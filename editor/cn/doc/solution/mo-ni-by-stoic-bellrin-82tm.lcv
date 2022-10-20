@@ -1,0 +1,20 @@
+### 解题思路
+
+经简单观察易得，第k个数与k二进制化后所得数中1的个数有关，若有奇数个1则为0，否则为1
+模拟即可
+
+### 代码
+
+* python3
+
+```python
+class Solution:
+    def kthGrammar(self, n: int, k: int) -> int:
+        flag=0
+        for i in range(n-2,-1,-1):
+            if k>pow(2,i):
+                flag+=1
+                k-=pow(2,i)
+        return flag%2
+```
+
