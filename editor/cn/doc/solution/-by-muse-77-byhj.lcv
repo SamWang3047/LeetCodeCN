@@ -1,0 +1,84 @@
+# 解题思路
+
+## 1> 利用堆栈实现
+
+首先，根据题目描述，我们发现只有**股票趋势是下降**的情况下，才会统计跨度日期，所以我们首先可以利用**堆栈**来进行跨度日期的计算。堆栈操作有如下3种情况：
+
+> 【**情况1**】如果**堆栈为空**，则直接入栈；
+> 【**情况2**】如果“栈顶元素”的price**大于**“输入股票”的price，则输入股票入栈；
+> 【**情况3**】如果“栈顶元素”的price**小于等于**“输入股票”的price，则将“栈顶元素”出栈，并将“栈顶元素”的day值加到“输入股票”的day值上。然后再对比下一个“栈顶元素”，操作以此类推，直到发现当前的“栈顶元素”大于了“输入股票”的price，则将“输入股票”入栈即可。
+
+具体操作，请见下图所示：
+
+![image.png](https://pic.leetcode.cn/1666319007-GvRtRh-image.png)
+
+## 2> 利用数组+指针实现
+
+第二种方式，我们**采用两个数组**，分别是`prices`用来记录股票价格和`days`用来记录跨度天数。那么针对于第n次输入的股票，它的价格和跨度天数就是`prices[n]`和`days[n]`。
+
+除了`prices`和`days`这两个数组之外，我们还需要两个指针，分别是`index`指针，用来指向“待输入股票”；`p`指针，index指针的前一个指针，用来与“待输入股票”进行price对比用的，如果它的price小于等于“待输入股票”的price，p就会向前移动。
+
+关于p向前移动还有一点需要注意的就是，**p向前移动格子的数量，就是days的具体值**；当days等于1时，就向前移动1个格子；如果days等于2时，就向前移动2个格子（因为days等于2，说明已经是两个格子聚合过的值了，就不需要重复统计了）。具体操作，请见下图所示：
+
+![image.png](https://pic.leetcode.cn/1666319022-EOenNT-image.png)
+
+# 代码实现
+
+## 1> 利用堆栈实现
+
+* java
+
+```java
+class StockSpanner {
+    Deque<Stock> deque;
+    public StockSpanner() {deque = new ArrayDeque();}
+    public int next(int price) {
+        int day = 1;
+        while (!deque.isEmpty() && deque.peekLast().price <= price) 
+            day += deque.removeLast().day;
+        deque.addLast(new Stock(price, day));
+        return day;
+    }
+    class Stock {
+        public int price;
+        public int day;
+        public Stock(int price, int day) {
+            this.price = price;
+            this.day = day;
+        }
+    }
+}
+```
+
+![image.png](https://pic.leetcode.cn/1666319030-nSCOBn-image.png)
+
+## 2> 利用数组+指针实现
+
+* java
+
+```java
+class StockSpanner {
+    int index = 0; // index：待插入的位置
+    int[] prices, days; // 价格列表和跨度天数列表，同一下标，一一对应关系
+    public StockSpanner() {
+        prices = new int[10000];
+        days = new int[10000];
+        index = 0;
+    }
+    public int next(int price) {
+        int p = index - 1; // 待对比的位置
+        while (p >= 0 && prices[p] <= price) p -= days[p]; // 向前移动p
+        prices[index] = price;
+        days[index] = index - p; 
+        return days[index++]; // index加1
+    }
+}
+```
+
+![image.png](https://pic.leetcode.cn/1666319038-QYkhPN-image.png)
+
+今天的文章内容就这些了：
+
+> 写作不易，笔者几个小时甚至数天完成的一篇文章，只愿换来您几秒钟的 **点赞** & **分享** 。
+
+更多技术干货，欢迎大家关注公众号“**爪哇缪斯**” ~ \\(^o^)/ ~ 「干货分享，每天更新」

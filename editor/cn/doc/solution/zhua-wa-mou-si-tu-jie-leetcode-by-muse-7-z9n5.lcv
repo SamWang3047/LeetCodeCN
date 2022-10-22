@@ -1,0 +1,58 @@
+# 解题思路
+
+根据题目描述，我们可以采用动态规划的方式对题目进行解答，首先，我们创建int dp[]，其中dp[i]用来表示第i个兼职工作的最大报酬。那么对于A和B这两个兼职工作而言，有如下两种情况：
+
+> 【情况1】A和B的工作时间**重叠**了，那么兼职工作要么`选择A`要么`选择B`。
+> 【情况2】A和B的工作时间**不重叠**，那么兼职工作`A和B都可以做`。
+
+那么针对上面的两种情况而言，我们首先将所有的工作**按照endTime进行排序**，这样，我们就可以方便的去获取最先完成的工作了。然后针对以上两种情况，进行报酬计算即可，我们以示例1为例，`输入：startTime = [1,2,3,3], endTime = [3,4,5,6], profit = [50,10,40,70]`，具体的计算逻辑如下图所示：
+
+![image.png](https://pic.leetcode.cn/1666403711-dulFeJ-image.png)
+
+## 四、代码实现
+
+* java
+
+```java
+class Solution {
+    public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+        Work[] works = new Work[endTime.length];
+        for (int i = 0; i < works.length; i++)
+            works[i] = new Work(startTime[i], endTime[i], profit[i]);
+        Arrays.sort(works);
+        int dp[] = new int[works.length + 1];
+        dp[0] = 0; // 初始第一个虚拟的dp，报酬为0
+        for (int i = 1; i <= works.length; i++) {
+            int pre = 0;
+            for (int j = i - 1; j >= 0; j--) {
+                // 向前寻找“最近的”“已完成的"兼职工作
+                if (works[j].endTime <= works[i-1].startTime) { 
+                    pre = j + 1; break;
+                }
+            }
+            dp[i] = Math.max(dp[i - 1], dp[pre] + works[i-1].profit);
+        }
+        return dp[works.length];
+    }
+    /** 兼职工作实体类 */
+    class Work implements Comparable<Work> {
+        public int startTime, endTime, profit;
+        public Work(int startTime, int endTime, int profit) {
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.profit = profit;
+        }
+        public int compareTo(Work other) {
+            return Integer.compare(this.endTime, other.endTime);
+        }
+    }
+}
+```
+
+![image.png](https://pic.leetcode.cn/1666403726-SvWLzw-image.png)
+
+今天的文章内容就这些了：
+
+> 写作不易，笔者几个小时甚至数天完成的一篇文章，只愿换来您几秒钟的 **点赞** & **分享** 。
+
+更多技术干货，欢迎大家关注公众号“**爪哇缪斯**” ~ \\(^o^)/ ~ 「干货分享，每天更新」
