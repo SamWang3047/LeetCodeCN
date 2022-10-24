@@ -1,0 +1,59 @@
+# 思路
+
+两次遍历：核心思路是维护一个后缀最大值数组，然后遍历的过程中维护前缀最小值，和对应位置的后缀最大值比较。
+一次遍历：维护两个max值，一直是当前遍历到的位置的前缀最大值，一个是答案下标的前缀最大值。从前往后遍历，当遇到当前值小于答案下标的前缀最大值时要更新答案下标到当前位置，同时更新答案下标的前缀最大值。最终答案就是下标+1（长度）
+
+# 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> rmax(n);
+        rmax[n - 1] = nums[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            rmax[i] = min(rmax[i + 1], nums[i]);
+        }
+        int res = 1;
+        int cur = nums[0];
+        for (int i = 1; i < n; i++) {
+            if (cur <= rmax[i]) {
+                return i;
+            }
+            cur = max(cur, nums[i]);
+        }
+        return n;
+    }
+};
+```
+
+时间复杂度：O(n)
+空间复杂度：O(n)
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& nums) {
+        int n = nums.size();
+        int loc = 0;
+        int leftmax = nums[0];
+        int curmax = nums[0];
+        for (int i = 1; i < n; i++) {
+            curmax = max(curmax, nums[i]);
+            if (nums[i] < leftmax) {
+                leftmax = curmax;
+                loc = i;
+            }
+        }
+        return loc + 1;
+    }
+};
+```
+
+时间复杂度：O(n)
+空间复杂度：O(1)

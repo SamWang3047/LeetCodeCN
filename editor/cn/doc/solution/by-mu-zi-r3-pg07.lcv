@@ -1,0 +1,50 @@
+> Problem: [915. 分割数组](https://leetcode.cn/problems/partition-array-into-disjoint-intervals/description/)
+
+[TOC]
+
+# 思路
+
+> 返回的值要尽可能地小，因此自然的想到，从左向右遍历，遇到合适的答案就返回答案。因此就是一个遍历中寻找判定条件而去找到答案的问题
+
+# 解题方法
+
+> 记录左侧数组的最大值，使用一个整形变量即可记录，无需创建一个数组每次遍历。对于右侧剩下的数进行遍历，需要保证右侧的最小值都大于左侧的最大值。因此若存在小于左侧最大值的数就退出。该代码也可优化，对右侧的最小值进行保存并每次修正，能够降低时间复杂度。
+
+# 复杂度
+
+- 时间复杂度:
+
+> 双层循环，时间复杂度： $O(n^2)$
+
+- 空间复杂度:
+
+> 没有用创建数组，也没有使用递归，时间复杂度： $O(1)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public int partitionDisjoint(int[] nums) {
+        int ans = 0;
+        int leftMax = nums[0];
+        int n = nums.length; 
+        while (ans < n) {
+            leftMax = Math.max(leftMax, nums[ans]);
+            for (int i = ans + 1; i < n; i++) {
+                if (nums[i] < leftMax) {
+                    break;
+                }
+                if (i == n - 1) {
+                    return ans + 1;
+                }
+            }
+            ans++;
+        }
+        return ans + 1;
+    }
+}
+```
+

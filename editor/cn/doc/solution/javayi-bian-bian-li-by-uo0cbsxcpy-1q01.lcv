@@ -1,0 +1,42 @@
+# 阅读题目
+
+题目中需要找一个分割点，使得左边数组内的值均**小于或等于**右边数组内的值，同时，还要尽可能让左边数组长度**尽可能地小**。
+
+# 解题
+
+一遍遍历即可解决
+
+1. 需要定义三个变量：
+   - split：分割点
+   - max：左边数组目前的最大值
+   - tempMax：当前遇到的最大值
+2. 想法：
+   - 在遍历的过程中，如果遇到比max小的值，直接让split加一即可，因为比max小的值一定要在左边数组中。
+   - 如果遇到大于等于max的值，需要记录在tempMax中临时存储
+   - 如果再次遇到比max小的值，那么左边数组不得不包含它，此时之前记录的tempMax就应该作为max，因为此时左边数组的最大值已经变为了tempMax。
+
+# 代码
+
+* java
+
+```java
+class Solution {
+    public int partitionDisjoint(int[] nums) {
+        //split：分割点 max：左边数组的最大值 tempMax：遍历过程中遇到的最大值
+        int split = 0, max = nums[0], tempMax = nums[0];
+        for(int i = 1; i < nums.length; ++i) {
+            //注意这里应为大于等于max值，因为需要保证左边数组长度尽可能地小
+            if(nums[i] >= max) {
+                //tempMax理解为当前的最大值，所以需要比较之前存储的tempMax和nums[i]，选择最大的作为tempMax
+                tempMax = Math.max(tempMax, nums[i]);
+            } else {
+                //如果当前遇到的值比左边数组最大值max要小，则左边数组应该包含该值，即split = i，同时，左边数组最大值max应该改变为目前数组中遇到的最大值
+                split = i;
+                max = tempMax;
+            }
+        }
+        return split + 1;
+    }
+}
+```
+
