@@ -1,0 +1,15 @@
+### 解题思路
+
+位运算
+![image.png](https://pic.leetcode-cn.com/1655447245-ZGhcMt-image.png)
+
+### 代码
+
+* typescript
+
+```typescript
+function exchangeBits(num: number): number {
+return (num&0b101010101010101010101010101010 )>>1 |( num&0b010101010101010101010101010101)<<1
+};
+```
+

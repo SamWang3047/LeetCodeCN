@@ -1,0 +1,110 @@
+固定一个数，使用双指针寻找满足条件的另外两个数
+对于i,ll,rr每次移动都要判断与之前的元素是否相等用来去重
+
+* []
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> ans;
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i < n - 2; i ++)
+        {
+            if(i > 0 && nums[i] == nums[i - 1])
+                continue;
+            int c = - nums[i];
+            int ll = i + 1, rr = n - 1;               //j从i + 1开始可以避免重复
+            while(ll < rr)
+            {
+                int sum = nums[ll] + nums[rr];
+                if(sum > c)
+                    rr --;
+                else if(sum < c)
+                    ll ++;
+                else
+                {
+                    ans.push_back({nums[i], nums[ll], nums[rr]});
+                    while(ll < rr && nums[ll] == nums[++ ll]);      //找到一个不重复的ll
+                    // while(ll < rr)
+                    // {
+                    //     ll ++;
+                    //     if(nums[ll] != nums[ll - 1])
+                    //         break;
+                    // }
+                    while(ll < rr && nums[rr] == nums[-- rr]);
+                }                
+            }
+        }
+        return ans;
+    }
+};
+```
+
+* []
+
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        ans = []
+        nums.sort()
+        for i in range(n - 2):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            ll, rr = i + 1, n - 1
+            target = - nums[i]
+            while ll < rr:
+                sum_ = nums[ll] + nums[rr]
+                if sum_ == target:
+                    ans.append([nums[i], nums[ll], nums[rr]])
+                    while ll < rr:
+                        ll += 1
+                        if nums[ll] != nums[ll - 1]:
+                            break
+                    while ll < rr:
+                        rr -= 1
+                        if nums[rr] != nums[rr + 1]:
+                            break
+                elif sum_ > target:
+                    rr -= 1
+                else:
+                    ll += 1
+        return ans
+```
+
+* []
+
+```java
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        int n = nums.length;
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        Arrays.sort(nums);
+        for(int i = 0; i < n - 2; i ++)
+        {
+            if(i > 0 && nums[i] == nums[i - 1])
+                continue;
+            int ll = i + 1, rr = n - 1;
+            int target = - nums[i];
+            while(ll < rr)
+            {
+                int sum_ = nums[ll] + nums[rr];
+                if(sum_ == target)
+                {
+                    ans.add(Arrays.asList(nums[i], nums[ll], nums[rr]));    //**********
+                    while(ll < rr && nums[ll] == nums[++ ll]);
+                    while(ll < rr && nums[rr] == nums[-- rr]);
+                }
+                else if(sum_ > target)
+                    rr --;
+                else
+                    ll ++;
+            }
+        }
+        return ans;
+    }
+}
+```
+

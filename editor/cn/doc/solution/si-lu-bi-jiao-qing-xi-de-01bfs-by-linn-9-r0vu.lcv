@@ -1,0 +1,46 @@
+### 思路
+
+思路还是常规的BFS套模板题，不过略有不同的是我们从第一个找到的值为1的点开始向四个面蔓延，当找到0的时候先把他插入队列的末尾（优先级较低），找到1的时候说明是在同一座岛上的1，把他插入队列的开头（优先级高），优先通过它来找到同一个岛屿下一个1，等到最后队列都是0的时候，再开始增加我们的次数time，如果找到一个1 且 time 大于0，那么我们就找到了另一个岛屿，直接返回即可。
+
+相同类型的题目：
+[2290.到达角落需要移除障碍物的最小数目](https://leetcode.cn/problems/minimum-obstacle-removal-to-reach-corner/)
+
+### Code
+
+* python
+
+```python
+class Solution:
+    def shortestBridge(self, grid: List[List[int]]) -> int:
+        # 01BFS 先找到一个整体的1 然后再探查另一个岛上的1
+        from collections import deque
+        m = len(grid)
+        n = len(grid[0])
+        visit = [[False] * n for _ in range(m)]
+        def bfs(i,j):
+            queue = deque([(i,j,0)])
+            while queue:
+                xx,yy,time = queue.popleft()
+                for dx,dy in ((xx+1,yy),(xx-1,yy),(xx,yy+1),(xx,yy-1)):
+                    if dx>=0 and dx < m and dy >= 0 and dy < n and visit[dx][dy] == False:
+                        visit[dx][dy] = True
+                        if grid[dx][dy] == 1:
+                            # time >= 1 表示通过跨越0 找到另一个岛了
+                            if time >= 1:
+                                return time
+                            else:
+                            # time为0表示此时还是在同一个岛屿，记得左插，优先级大于0的块
+                                queue.appendleft((dx,dy,0))
+                        else:
+                            queue.append((dx,dy,time+1))
+        # 找到第一个为1的点 
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    visit[i][j] = True
+                    return bfs(i,j)
+
+```
+
+![1656744907972.png](https://pic.leetcode-cn.com/1656744927-YXKDww-1656744907972.png)
+

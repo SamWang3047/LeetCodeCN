@@ -1,0 +1,38 @@
+### 解题思路
+
+1、遍历链表。
+
+### 执行结果
+
+![捕获.JPG](https://pic.leetcode.cn/1666536120-nYGJfI-%E6%8D%95%E8%8E%B7.JPG)
+
+### 代码
+
+* java
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public int getDecimalValue(ListNode head) {
+        StringBuilder sb = new StringBuilder();
+        // 遍历链表，字符串拼接各节点的值
+        while (head != null) {
+            sb.append(head.val);
+            head = head.next;
+        }
+
+        // 二进制字符串转整数
+        return Integer.parseInt(sb.toString(), 2);
+    }
+}
+```
+
