@@ -1,0 +1,92 @@
+# 解题思路
+
+## 1> 利用回溯
+
+首先，根据题目描述，我们要将遇到的所有“英文字母”执行大小写转换，并将每一个变换后的字符串保存下来，作为最终结果输出。那么，我们可以采用**回溯**的方式对这道题进行处理。针对于回溯的实现，其实是有固定的模板的，我们以下图中的字符串为例：
+
+> **循环遍历整个字符串s的每个字符**
+> **步骤1**：发现下标为i处是英文字母时，我们以第0处是a为例，则将a变为A。
+> **步骤2**：执行递归操作，处理下一个英文字母，即：第1层以A为基础，去处理下一个英文字母b。
+> **步骤3**：执行回溯操作，将下标为0的英文字母a进行还原操作，即：从A还原为a。
+
+详细的操作，请见下图所示：
+
+![image.png](https://pic.leetcode.cn/1667093178-pOdSPG-image.png)
+
+## 2> 利用List进行模拟
+
+除了回溯方法之外，我们也可以先将`s=“a1b2c”`字符串放入到`List`中，然后遍历整个字符串`s`，当发现下标`i`处是英文字母后，执行如下操作：
+
+> **步骤1**：将当前List中所有的字符串都复制出来一份。
+> **步骤2**：将下标为i处的字符执行大小写转换。即：如果是大写则变为小写，如果是小写则变为大写。
+> **步骤3**：然后再将转换后的字符串添加到List中。
+
+具体操作如下图所示：
+
+![image.png](https://pic.leetcode.cn/1667093209-ROtYEP-image.png)
+
+![image.png](https://pic.leetcode.cn/1667093218-DlJwDF-image.png)
+
+# 代码实现
+
+## 1> 回溯
+
+* java
+
+```java
+class Solution {
+    public List<String> letterCasePermutation(String s) {
+        return buildStr(0, new ArrayList(), s.toCharArray());
+    }
+    private List<String> buildStr(int start, List<String> result, char[] sc) {
+        result.add(new String(sc));
+        for (int i = start; i < sc.length; i++) {
+            if (sc[i] < 'A') continue; // sc[i]是数字，则不需要变化
+            if (sc[i] >= 'a') {
+                sc[i] = (char) (sc[i] - 32); // 小写转大写
+                buildStr(i + 1, result, sc);
+                sc[i] = (char) (sc[i] + 32); // 回溯
+            } else {
+                sc[i] = (char) (sc[i] + 32); // 大写转小写
+                buildStr(i + 1, result, sc);
+                sc[i] = (char) (sc[i] - 32); // 回溯
+            }
+        }
+        return result;   
+    }   
+}
+```
+
+![image.png](https://pic.leetcode.cn/1667093246-iruflu-image.png)
+
+## 2> 利用List进行模拟
+
+* java
+
+```java
+class Solution {
+    public List<String> letterCasePermutation(String s) {
+        List<String> result = new ArrayList();
+        result.add(s);
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) < 'A') continue;
+            int size = result.size();
+            for (int j = 0; j < size; j++) {
+                char[] ic = result.get(j).toCharArray();
+                if (ic[i] >= 'a') ic[i] = (char) (ic[i] - 32); // 小写转大写
+                else ic[i] = (char) (ic[i] + 32); // 大写转小写
+                result.add(new String(ic));
+            }
+        }
+        return result;
+    }
+}
+```
+
+![image.png](https://pic.leetcode.cn/1667093253-VrRccK-image.png)
+
+今天的文章内容就这些了：
+
+> 写作不易，笔者几个小时甚至数天完成的一篇文章，只愿换来您几秒钟的 **点赞** & **分享** 。
+
+更多技术干货，欢迎大家关注公众号“**爪哇缪斯**” ~ \\(^o^)/ ~ 「干货分享，每天更新」

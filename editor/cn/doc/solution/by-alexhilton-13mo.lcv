@@ -1,0 +1,39 @@
+### 暴力遍历 解题思路
+
+顺序遍历，然后做匹配就行了，按**字段名字(ruleKey)去匹配字段 的值(ruleValue)**。
+
+这题『强制在线』，空间换时间（如用哈希表事先存储所有的字段 值）意义不大。
+
+可优化的点是字段 名字如果比较多的话，可以用哈希表来把字段名字转化为索引值。
+
+* java
+
+```java
+class Solution {
+    private static final String[] keys = {"type", "color", "name"};
+
+    public int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
+        int idx = index(ruleKey);
+        int result = 0;
+        for (List<String> it : items) {
+            if (ruleValue.equals(it.get(idx))) {
+                result++;
+            }
+        }
+
+        return result;
+    }
+
+    private int index(String ruleKey) {
+        for (int i = 0; i < keys.length; i++) {
+            if (ruleKey.equals(keys[i])) {
+                return i;
+            }
+        }
+
+        return -1; // Should not be here.
+    }
+}
+```
+
+时间复杂度$O(n)$，空间复杂度$O(1)$。

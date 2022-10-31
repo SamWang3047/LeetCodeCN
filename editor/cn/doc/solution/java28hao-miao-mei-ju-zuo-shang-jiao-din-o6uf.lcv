@@ -1,0 +1,29 @@
+# 解题思路
+
+1.整个图像可以在扩大至9倍-2行2列的空间移动，视野缩小到以点为基准，左上角顶点可以在扩大至4倍-1行1列的空间移动，枚举该顶点所有偏移位置，对于每个偏移位置枚举图像所有点与另一个图像的重叠情况。
+2.优化：通过Math.max和min确定要枚举的点的边界，不去遍历越界的点同时不遗漏。
+
+# 代码
+
+* java
+
+```java
+class Solution {
+    public int largestOverlap(int[][] img1, int[][] img2) {
+        int n=img1.length,max=0;
+        for(int k=-n+1;k<n;k++){
+            for(int l=-n+1;l<n;l++){
+                int lap=0;
+                for(int i=Math.max(-k,0);i<n+Math.min(-k,0);i++){
+                    for(int j=Math.max(-l,0);j<n+Math.min(-l,0);j++){
+                        if(img1[i][j]==1&&img1[i][j]==img2[i+k][j+l])lap++;
+                    }
+                }
+                max=Math.max(max,lap);
+            }
+        }
+        return max;
+    }
+}
+```
+

@@ -1,0 +1,188 @@
+> Problem: [784. 字母大小写全排列](https://leetcode.cn/problems/letter-case-permutation/description/)
+
+[TOC]
+
+# 方法一：直接递归
+
+## 解题方法
+
+这道题的[官解](https://leetcode.cn/problems/letter-case-permutation/solutions/1934375/zi-mu-da-xiao-xie-quan-pai-lie-by-leetco-cwpx/)用了三种方法，涉及广度优先搜索、深度优先搜索（回溯）这些核武器。
+
+但是本题可以不管这些高大上的概念，直接进行最朴素的递归。
+
+记字符串s的最后m个字符，对应的所有可能性为$list_m$；记s的倒数第m+1个字符为c，那么$list_{m+1}$很容易被求解：
+
+> 只需遍历$list_m$，记其中的元素为tail，在每个tail前面添加字符c；如果c不是数字，则将c大小写颠倒，也添加到tail的前面。
+
+并且，因为每次递归只涉及到一个子问题，所以很容易改成循环的形式。倒着遍历即可。
+
+## 复杂度
+
+- 时间复杂度:
+
+> 最坏情况下，字符串s中不含数字，n个位置都是字母，每个字母都有大写和小写两种可能，总共有$2^n$中可能。由于这道题的返回结果必须是字符串，这$2^n$种可能中，每一种都要做O(n)次字符串的拼接，所以需要仔细考察字符串拼接的代价。
+>
+> 在java中，字符串内部是以char[]，也就是以数组存储的，字符串拼接时，最终会调用native方法System.arraycopy。这里假设执行一次System.arraycopy的代价是O(1)（实际上情况可能会更复杂），那拼接一次字符串的代价也为O(1)。对其他语言，可以做相同的假设。**于是，递归算法的总的时间复杂度为$O(n \cdot 2^n)$。**
+
+- 空间复杂度:
+
+> 递归栈的深度为n，且第m次递归时，总是需要缓存第m-1次的结果，最大的缓存数目为$2^{n-1}$个字符串，每个字符串长度为n，所以**即便不考虑返回值的情况下，空间复杂度也为$O(n \cdot 2^n)$。**
+
+**如此看来，似乎朴素递归官解的复杂度是一样的，不管是空间还是时间。但是这里其实另有乾坤。先按下不表，最后再说。**
+
+## 代码
+
+* []
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var letterCasePermutation = function(s) {
+    return helper(s, 0);
+};
+const helper = function(s, i){
+    if(i == s.length)return [""];
+    let c = s.charAt(i);
+    let headList = [c];
+    if(c >= 'A')headList.push(swapCase(c));// 字母大小写转换
+
+    let ret = [];
+    let tailList = helper(s, i + 1);
+    for(let tail of tailList){
+        for(let head of headList)ret.push(head + tail)
+    }
+    return ret;
+}
+const swapCase = function(ch){
+    if ('a' <= ch && ch <= 'z') return ch.toUpperCase();
+    if ('A' <= ch && ch <= 'Z') return ch.toLowerCase();
+}
+```
+
+* []
+
+```Java
+
+class Solution {
+    public List<String> letterCasePermutation(String s) {
+        return letterCasePermutation(s, 0);
+    }
+    private List<String> letterCasePermutation(String s, int i) {
+        if(i == s.length())return Arrays.asList("");
+
+        char c = s.charAt(i);
+        List<Character> headList = new ArrayList(){{add(c);}};
+        if(c >= 'A')headList.add((char)(c ^ 32));// 字母大小写转换
+
+        List<String> tailList = letterCasePermutation(s, i + 1);
+        List<String> ret = new ArrayList<>();
+        for(String tail: tailList){
+            for(char head: headList){
+                ret.add(head + tail); //java中，实测使用下面注销掉的StringBuilder，效率更高。这一点令人困惑，因为jvm处理head + tail，也是要内部生成StringBuilder的，这一点先不管。
+                //StringBuilder sb = new StringBuilder();
+                //sb.append(head);
+                //sb.append(tail);
+                //ret.add(sb.toString());
+            }
+        }
+        return ret;
+    }
+
+}
+```
+
+# 方法二：迭代，且无需借助队列
+
+方法一很容易改成迭代版本，直接上代码：
+
+## 代码
+
+* []
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var letterCasePermutation = function(s) {
+        let n = s.length;
+        let ret = [""];
+        for(i = n - 1; i >= 0; i--){
+            let c = s.charAt(i);
+            let headList = [c];
+            if(c >= 'A')headList.push(swapCase(c));// 字母大小写转换
+
+            let newRet = [];
+            for(let tail of ret){
+                for(let head of headList)newRet.push(head + tail)
+            }
+            ret = newRet;
+        }
+        return ret;
+};
+const swapCase = (ch) => {
+    if ('a' <= ch && ch <= 'z') return ch.toUpperCase();
+    if ('A' <= ch && ch <= 'Z') return ch.toLowerCase();
+}
+```
+
+* []
+
+```java
+class Solution {
+    public List<String> letterCasePermutation(String s) {
+        int n = s.length();
+        List<String> ret = Arrays.asList("");
+        for(int i = n - 1; i >= 0; i--){
+            char c = s.charAt(i);
+            List<Character> headList = new ArrayList<>(){{add(c);}};
+            if(c >= 'A')headList.add((char)(c ^ 32));// 字母大小写转换
+
+            List<String> newRet = new ArrayList<>();
+            for(String tail: ret){
+                for(char head: headList){
+                    newRet.add(head + tail); //java中，实测使用下面注销掉的StringBuilder，效率更高。这一点令人困惑，因为jvm处理head + tail，也是要内部生成StringBuilder的，这一点先不管。
+                    //StringBuilder sb = new StringBuilder();
+                    //sb.append(head);
+                    //sb.append(tail);
+                    //newRet.add(sb.toString());
+                }
+            }
+            ret = newRet;
+        }
+        return ret;
+    }
+
+}
+```
+
+## 复杂度
+
+> 和递归比起来，除了没有栈空间的消耗，其余都是一样的。
+
+# 扩展
+
+## 用链表降低返回值的空间复杂度
+
+细心的你可能已经发现，本文的迭代，顺序都是倒者来的，而官解的方法1和方法2，都是正着来的。
+
+对于本题，倒序和正序迭代其实没啥太大的区别。但是**假如对题目稍作改动，允许以链表的形式返回（而不是字符串或者数组），那么空间复杂度加会大大降低，从$O(n\cdot2^n)$，降低到$O(2^n)$。**
+
+比如，"abc3"这个字符串，最终会形成8种可能，但是并不需要4*8=32个节点，而是仅仅15个节点就够了，其中有大量的节点时被复用了，不用都拷贝一次。对于"abc3"，其结果的存储结构类似于一颗倒立的的完全二叉树，如下如（忽略我的字，略丑）：
+
+![image.png](https://pic.leetcode.cn/1667054147-DitKhv-image.png)
+
+但是这其实不是一棵树，其中的节点指向是这样的：
+
+![image.png](https://pic.leetcode.cn/1667096763-lHFkiQ-image.png)
+
+这种空间复杂度上的优化，是正向迭代无法实现的。如果使用正向迭代，最终的数据结构会变成类似下图（注意此图换了个例子，对应的源字符串为“3abd”）：
+
+![image.png](https://pic.leetcode.cn/1667097494-KFIDDP-image.png)
+
+## 再做一道类似的题
+
+[46. 全排列](https://leetcode.cn/problems/permutations/)这道题，可以采取和本题类似的思路，并用链表降低空间复杂度。
+

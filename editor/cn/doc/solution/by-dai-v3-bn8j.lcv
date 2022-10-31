@@ -1,0 +1,81 @@
+##### 本文共提供两种解法:哈希表(不推荐),遍历集合.
+
+# 解法一:哈希表
+
+思路:
+- 将集合中的数据根据当前索引的属性来存储,如:第一列为类型,第二列为颜色,第三列为物品名称.
+- 判断ruleKey是需要查找什么样的属性(类型?颜色?物品名称?)
+- 用ruleValue去查找对应的map,有相同的key则记录该key所映射的val
+
+* Java
+
+```Java
+---------------------------------------------
+执行用时：15 ms, 在所有 Java 提交中击败了5.20% 的用户
+内存消耗：47.5 MB, 在所有 Java 提交中击败了5.20% 的用户
+通过测试用例：92 / 92
+---------------------------------------------
+class Solution {
+    public int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
+        Map<String,Integer> type=new HashMap<>();
+        Map<String,Integer> color=new HashMap<>();
+        Map<String,Integer> name=new HashMap<>();
+
+        for(List<String> list:items){
+            addVal(type,list.get(0));
+            addVal(color,list.get(1));
+            addVal(name,list.get(2));
+        }
+        int count=0;
+
+        if("type".equals(ruleKey)){
+            count=type.getOrDefault(ruleValue,0);
+        }
+        else if("color".equals(ruleKey)){
+            count=color.getOrDefault(ruleValue,0);
+        }
+        else {
+            count=name.getOrDefault(ruleValue,0);
+        }
+
+        return count;
+    }
+    public void addVal(Map<String, Integer> map, String key){
+        if(map.containsKey(key)){
+            map.put(key,map.getOrDefault(key,0)+1);
+        }
+        else{
+            map.put(key,1);
+        }
+    }
+}
+```
+
+# 解法二:遍历集合
+
+思路:
+- 既然集合中同一列的属性是一样的,所以可以直接查找与ruleKey对应列下的值
+- 判断当前列是否有与ruleValue相同的值.
+
+* Java
+
+```Java
+---------------------------------------------
+执行用时：4 ms, 在所有 Java 提交中击败了94.33% 的用户
+内存消耗：46.5 MB, 在所有 Java 提交中击败了9.70% 的用户
+通过测试用例：92 / 92
+---------------------------------------------
+class Solution {
+    public int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
+        int index="color".equals(ruleKey)?1:"name".equals(ruleKey)?2:0;
+        int count=0;
+        for(List<String> list:items){
+            if(list.get(index).equals(ruleValue)){
+                count++;
+            }
+        }
+        return count;
+    }
+}
+```
+

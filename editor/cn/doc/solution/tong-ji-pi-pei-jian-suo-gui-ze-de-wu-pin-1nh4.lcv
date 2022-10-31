@@ -1,0 +1,29 @@
+### 方法，模拟
+
+解题思路：利用哈希表把输入 $\textit{ruleKey}$ 转换为 $\textit{items}[i]$ 的下标，然后再遍历一遍 $\textit{items}$，找出符合条件的物品数量。
+
+[参考](https://leetcode.cn/problems/count-items-matching-a-rule/solution/tong-ji-pi-pei-jian-suo-gui-ze-de-wu-pin-3qod/)
+
+### 代码
+
+* []
+
+```Java
+class Solution {
+    public int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
+        int index = new HashMap<String, Integer>() {{
+            put("type", 0);
+            put("color", 1);
+            put("name", 2);
+        }}.get(ruleKey);
+        int res = 0;
+        for (List<String> item : items) {
+            if (item.get(index).equals(ruleValue)) {
+                res++;
+            }
+        }
+        return res;
+    }
+}
+```
+

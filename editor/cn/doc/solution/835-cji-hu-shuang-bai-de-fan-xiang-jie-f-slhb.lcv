@@ -1,0 +1,62 @@
+![screenshot-20210828-223424.png](https://pic.leetcode-cn.com/1630161324-seiHnM-screenshot-20210828-223424.png)
+
+### 解题思路
+
+反向思考
+1. 我们不是正面去计算一个结构移动后和img2有多少重合，而是反向去计算
+2. 反向可以实现单词遍历就计算出结果，即某个位置到底有多少偏移量和它是相等，所有偏移里最大值就是最大可能的重叠数
+3. 偏移量大小
+   - (2n+1)\*(2n+1)
+   - 等于就是四个方向正反移动n个位置
+
+### 代码
+
+* cpp
+
+```cpp
+/*
+
+class Solution {
+public:
+    int largestOverlap(vector<vector<int>>& img1, vector<vector<int>>& img2) {
+        int n = img1.size();
+        int diff[2*n+1][2*n+1];
+        memset(diff, 0, sizeof(diff));
+
+        // 遍历图片每个位置去找多少偏移后和它一样
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (img1[i][j] == 1)
+                {
+                    for (int l = 0; l < n; ++l)
+                    {
+                        for (int m = 0; m < n; ++m)
+                        {
+                            if (img2[l][m] == 1)
+                            {
+                                // 偏移位置，这里要+n保证其大于等于0
+                                diff[i-l+n][j-m+n] += 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 找出最大偏移量，就是结果
+        int res = 0;
+        for (int i = 0; i < 2*n+1; ++i)
+        {
+            for (int j = 0; j < 2*n+1; ++j)
+            {
+                res = max(res, diff[i][j]);
+            }
+        }
+
+        return res;
+    }
+};
+```
+
