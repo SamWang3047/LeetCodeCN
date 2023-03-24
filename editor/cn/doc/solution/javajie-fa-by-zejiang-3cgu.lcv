@@ -1,0 +1,52 @@
+> Problem: [1662. 检查两个字符串数组是否相等](https://leetcode.cn/problems/check-if-two-string-arrays-are-equivalent/description/)
+
+[TOC]
+
+# 思路
+
+> 讲述看到这一题的思路
+
+# 解题方法
+
+> 描述你的解题方法
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public boolean arrayStringsAreEqual(String[] word1, String[] word2) {
+        int p1= 0, p2 = 0;
+        int i = 0, j = 0; // 每个字符串的索引
+        while(p1 < word1.length && p2 < word2.length){
+            if(word1[p1].charAt(i) != word2[p2].charAt(j)){
+                return false;
+            }
+            i++;
+            if(i == word1[p1].length()){
+                i = 0;
+                p1++;
+            }
+            j++;
+            if(j == word2[p2].length()){
+                j = 0;
+                p2++;
+            }
+        }
+        return p1 == word1.length && p2 == word2.length;
+    }
+}
+```
+

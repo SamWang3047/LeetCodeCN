@@ -1,0 +1,53 @@
+### 解题思路
+
+把数组中的字符串连接起来后比较。
+
+### 代码
+
+* []
+
+```Python
+class Solution:
+    def arrayStringsAreEqual(self, word1: List[str], word2: List[str]) -> bool:
+        return ''.join(word1) == ''.join(word2)
+```
+
+* []
+
+```Rust
+impl Solution {
+    pub fn array_strings_are_equal(word1: Vec<String>, word2: Vec<String>) -> bool {
+        &word1.concat() == &word2.concat()
+    }
+}
+```
+
+* []
+
+```Java
+class Solution {
+    public boolean arrayStringsAreEqual(String[] word1, String[] word2) {
+        return (String.join("", word1)).equals(String.join("", word2));
+    }
+}
+```
+
+### 生成器的解法
+
+另外，如果采用生成器的写法，在数据量大时，可把空间复杂度降低至O(1)，不过在这题里不太明显。
+
+### 代码
+
+* []
+
+```Python
+class Solution:
+    def arrayStringsAreEqual(self, word1: List[str], word2: List[str]) -> bool:
+        a = (j for i in word1 for j in i)
+        b = (j for i in word2 for j in i)
+        while (x := next(a, 0)) == (y := next(b, 0)):
+            if x == 0 and y == 0:
+                return True
+        return False
+```
+
